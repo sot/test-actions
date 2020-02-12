@@ -1,6 +1,9 @@
 name: Python flake8 check
 
-on: [push]
+on:
+  push:
+    branches:
+    - flake
 
 jobs:
   build:
