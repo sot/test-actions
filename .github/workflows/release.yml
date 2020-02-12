@@ -24,5 +24,6 @@ jobs:
         export GITHUB_PASSWORD=${{ secrets.GITHUB_TOKEN }}
         skare3-release-merge-info --user $GITHUB_ACTOR --repository $GITHUB_REPOSITORY --sha $GITHUB_SHA
         export GITHUB_PASSWORD=${{ secrets.CHANDRA_XRAY_TOKEN }}
+        echo skare3-create-issue --user chandra-xray --repository sot/test-actions --latest-release $GITHUB_REPOSITORY --label 'Package update'
         skare3-create-issue --user chandra-xray --repository sot/test-actions --latest-release $GITHUB_REPOSITORY --label 'Package update'
         echo done
