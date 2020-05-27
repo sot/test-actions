@@ -1,0 +1,11 @@
+name: Update repo
+on: [push]
+
+jobs:
+  update-repo:
+    runs-on: kady
+    name: Update repo
+    steps:
+    - name: Update repo step
+      run: |
+        /proj/sot/ska/jgonzalez/ska/miniconda3-builder/bin/skare /proj/sot/ska/jgonzalez/git/skare3_tools/scripts/sync-conda-repository.sh
