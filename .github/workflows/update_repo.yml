@@ -3,7 +3,7 @@ on: [push]
 
 jobs:
   update-repo:
-    runs-on: kady
+    runs-on: self-hosted
     name: Update repo
     steps:
     - name: Update repo step
