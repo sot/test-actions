@@ -9,4 +9,4 @@ jobs:
     - name: Update repo step
       run: |
         echo $PATH
-        /proj/sot/ska/jgonzalez/git/skare3_tools/scripts/sync-conda-repository.sh
+        sync-conda-repository.sh
