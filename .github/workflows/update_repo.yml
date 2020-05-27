@@ -3,9 +3,9 @@ on: [push]
 
 jobs:
   update-repo:
-    runs-on: self-hosted
+    runs-on: head
     name: Update repo
     steps:
     - name: Update repo step
       run: |
-        /proj/sot/ska/jgonzalez/ska/miniconda3-builder/bin/skare /proj/sot/ska/jgonzalez/git/skare3_tools/scripts/sync-conda-repository.sh
+        /proj/sot/ska/jgonzalez/git/skare3_tools/scripts/sync-conda-repository.sh
