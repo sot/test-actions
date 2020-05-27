@@ -9,4 +9,4 @@ jobs:
     steps:
     - name: Update repo step
       run: |
-        sync-conda-repository.sh
+        echo $PATH
