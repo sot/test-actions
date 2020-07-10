@@ -1,0 +1,19 @@
+name: Update repo
+on:
+  release:
+    types:
+    - prereleased
+
+jobs:
+  update-repo:
+    runs-on: head
+    name: Update repo
+    steps:
+    - name: Update repo step
+      run: |
+        which conda
+        release_tag=`basename "$GITHUB_REF"`
+        conda create -y -n test-${release_tag}
+        conda info --envs
+        source activate test-${release_tag}
+        which conda
