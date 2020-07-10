@@ -21,7 +21,7 @@ jobs:
       - name: Upload packages 1
         uses: actions/upload-artifact@v2
         with:
-          name: packages
+          name: packages-linux-64
           path: |
             builds/linux-64/*
             !builds/*/*repodata*
@@ -51,7 +51,7 @@ jobs:
       - name: Upload packages 2
         uses: actions/upload-artifact@v2
         with:
-          name: packages
+          name: packages-win-64
           path: |
             builds/win-64/*
             !builds/*/*repodata*
@@ -76,7 +76,7 @@ jobs:
       - name: Upload packages 3
         uses: actions/upload-artifact@v2
         with:
-          name: packages
+          name: packages-osx-64
           path: |
             builds/osx-64/*
             !builds/*/*repodata*
@@ -89,7 +89,18 @@ jobs:
       - name: Download packages
         uses: actions/download-artifact@v2
         with:
-          name: packages
+          name: packages-linux-64
+          path: linux-64
+      - name: Download packages
+        uses: actions/download-artifact@v2
+        with:
+          name: packages-win-64
+          path: win-64
+      - name: Download packages
+        uses: actions/download-artifact@v2
+        with:
+          name: packages-osx-64
+          path: osx-64
       - name: check
         shell: bash
         run: ls -R
