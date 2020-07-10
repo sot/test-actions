@@ -1,0 +1,13 @@
+name: Alias
+on: [push]
+
+jobs:
+  update-repo:
+    runs-on: head
+    name: Simple script
+    steps:
+    - name: run script
+      shell: bash
+      run: |
+        alias do='echo this'
+        do or that
