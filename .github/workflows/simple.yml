@@ -9,5 +9,5 @@ jobs:
     - name: run script
       shell: bash
       run: |
-        alias do='echo this'
-        do or that
+        alias cmd='echo some long command'
+        cmd to do something
