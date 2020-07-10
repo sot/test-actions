@@ -25,15 +25,16 @@ jobs:
         uses: actions/download-artifact@v1
         with:
           name: homework
+          path: .
       - shell: bash
         run: |
-          value=`cat homework/math-homework.txt`
-          expr $value \* 9 > homework/math-homework.txt
+          value=`cat math-homework.txt`
+          expr $value \* 9 > math-homework.txt
       - name: Upload math result for job 2
         uses: actions/upload-artifact@v1
         with:
           name: homework
-          path: homework/math-homework.txt
+          path: math-homework.txt
 
   job_3:
     name: Display results
@@ -49,4 +50,3 @@ jobs:
         run: |
           value=`cat homework/math-homework.txt`
           echo The result is $value
-          
