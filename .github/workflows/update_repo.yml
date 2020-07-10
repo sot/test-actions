@@ -1,5 +1,5 @@
 name: Update repo
-on: [push]
+on: [repository_dispatch]
 
 jobs:
   update-repo:
