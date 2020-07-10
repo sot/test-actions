@@ -25,6 +25,7 @@ jobs:
         with:
           name: packages-linux-64
           path: |
+            builds/noarch/*
             builds/linux-64/*
             !builds/*/*repodata*
 
