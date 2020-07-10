@@ -10,9 +10,11 @@ jobs:
       - shell: bash
         run: |
           expr 3 + 7 > math-homework.txt
-          mkdir -p builds/linux-64
+          mkdir -p builds/linux-64 builds/noarch
           echo one > builds/linux-64/pkg-one
           echo one > builds/linux-64/repodata.json
+          echo one > builds/noarch/pkg-two
+          echo one > builds/noarch/repodata.json
       - name: Upload math result for job 1
         uses: actions/upload-artifact@v2
         with:
@@ -90,7 +92,7 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: packages-linux-64
-          path: linux-64
+          path: .
       - name: Download packages
         uses: actions/download-artifact@v2
         with:
