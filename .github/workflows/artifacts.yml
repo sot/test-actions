@@ -10,11 +10,21 @@ jobs:
       - shell: bash
         run: |
           expr 3 + 7 > math-homework.txt
+          mkdir -p builds/linux-64
+          echo one > builds/linux-64/pkg-one
+          echo one > builds/linux-64/repodata.json
       - name: Upload math result for job 1
-        uses: actions/upload-artifact@v1
+        uses: actions/upload-artifact@v2
         with:
           name: homework
           path: math-homework.txt
+      - name: Upload packages 1
+        uses: actions/upload-artifact@v2
+        with:
+          name: packages
+          path: |
+            builds/linux-64/*
+            !builds/*/*repodata*
 
   job_2:
     name: Multiply by 9
@@ -30,11 +40,21 @@ jobs:
         run: |
           value=`cat math-homework.txt`
           expr $value \* 9 > math-homework.txt
+          mkdir -p builds/win-64
+          echo two > builds/win-64/pkg-one
+          echo two > builds/win-64/repodata.json
       - name: Upload math result for job 2
         uses: actions/upload-artifact@v1
         with:
           name: homework
           path: math-homework.txt
+      - name: Upload packages 2
+        uses: actions/upload-artifact@v2
+        with:
+          name: packages
+          path: |
+            builds/win-64/*
+            !builds/*/*repodata*
 
   job_3:
     name: Display results
@@ -50,3 +70,26 @@ jobs:
         run: |
           value=`cat homework/math-homework.txt`
           echo The result is $value
+          mkdir -p builds/osx-64
+          echo three > builds/osx-64/pkg-one
+          echo three > builds/osx-64/repodata.json
+      - name: Upload packages 3
+        uses: actions/upload-artifact@v2
+        with:
+          name: packages
+          path: |
+            builds/osx-64/*
+            !builds/*/*repodata*
+
+  job_4:
+    name: Check
+    needs: job_3
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download packages
+        uses: actions/download-artifact@v2
+        with:
+          name: packages
+      - name: check
+        shell: bash
+        run: ls -R
