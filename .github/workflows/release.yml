@@ -5,22 +5,32 @@ on:
       - released
 
 jobs:
-  patch-release:
+
+  sanity_check:
     runs-on: ubuntu-latest
-    name: Patch Release
+    outputs:
+      packages: ${{ steps.sanity_check.outputs.packages }}
+      prerelease: ${{ steps.sanity_check.outputs.prerelease }}
     steps:
+    - name: Checkout skare3
+      uses: actions/checkout@v2
+      with:
+        repository: sot/skare3
+        ref: 2020.9
+        path: skare3
     - name: Fetch Skare3 Tools
       uses: actions/checkout@v2
       with:
         repository: sot/skare3_tools
-        ref: test
+        ref: master
         path: skare3_tools
-    - name: Release Description and Skare3 Issue
+    - id: sanity_check
       run: |
         sudo pip3 install setuptools
         sudo pip3 install -r ./skare3_tools/requirements.txt
         sudo pip3 install ./skare3_tools
-        skare3-release-merge-info --repository $GITHUB_REPOSITORY --sha $GITHUB_SHA
-        skare3-create-issue --repository sot/skare3 --latest-release $GITHUB_REPOSITORY --label 'Package update'
+        skare3-release-check --skare3-path ./skare3 --version $GITHUB_REF
       env:
-        GITHUB_API_TOKEN: ${{ secrets.SKARE3_CI_API_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GITHUB_API_TOKEN: ${{ secrets.CHANDRA_XRAY_TOKEN }}
+
