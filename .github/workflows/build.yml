@@ -1,8 +1,5 @@
 name: Conda build
 on:
-  release:
-    types:
-    - created
   repository_dispatch:
     types:
     - conda-build
