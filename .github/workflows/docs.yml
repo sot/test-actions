@@ -3,7 +3,7 @@ name: Deploy Docs
 on:
   release:
     types:
-    - created
+    - released
   repository_dispatch:
     types:
     - build-docs
