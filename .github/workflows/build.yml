@@ -1,8 +1,5 @@
 name: Conda build
 on:
-  push:
-    branches:
-    - master
   release:
     types:
     - created
