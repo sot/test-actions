@@ -1,2 +1,3 @@
 # test-actions
-Test GitHub actions
+
+A realistic package with which to test GitHub actions
