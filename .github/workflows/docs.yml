@@ -46,4 +46,4 @@ jobs:
           message: "Deploy docs"
           add: "docs"
         env:
-          GITHUB_TOKEN: whatever
+          GITHUB_TOKEN: ${{ secrets.CHANDRA_XRAY_TOKEN }}
