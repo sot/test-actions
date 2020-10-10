@@ -33,4 +33,4 @@ jobs:
           message: "Save"
           add: "tokens"
         env:
-          GITHUB_TOKEN: ${{ secrets.CHANDRA_XRAY_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
