@@ -26,7 +26,7 @@ jobs:
       - name: Commit changes
         uses: EndBug/add-and-commit@v5
         with:
-          ref: "branch"
+          branch: "netrc"
           cwd: "netrc"
           author_name: Javier Gonzalez
           author_email: javierggt@yahoo.com
