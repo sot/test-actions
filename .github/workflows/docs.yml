@@ -1,5 +1,5 @@
 ---
-name: Deploy Docs
+name: Deploy Documentation
 on:
   release:
     types:
@@ -11,7 +11,7 @@ on:
 jobs:
   build-linux:
     runs-on: head
-    name: Deploy Docs
+    name: Deploy Documentation
     steps:
       - name: Fetch gh-pages
         uses: actions/checkout@v2
