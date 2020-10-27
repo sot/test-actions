@@ -96,7 +96,7 @@ jobs:
           do
             echo conda index package/$d;
             echo package/$d;
-            ls package/$d;
+            ls -l package/$d;
           done;
         env:
           CONDA_CHANNEL_DIR: /proj/sot/ska/www/ASPECT/ska3-conda/masters
