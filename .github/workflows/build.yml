@@ -95,6 +95,7 @@ jobs:
           for d in noarch linux-64 osx-64 win-64;
           do
             echo conda index package/$d;
+            ls package/$d;
           done;
         env:
           CONDA_CHANNEL_DIR: /proj/sot/ska/www/ASPECT/ska3-conda/masters
