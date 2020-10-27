@@ -61,7 +61,8 @@ jobs:
     - name: Build Package
       shell: bash -l {0}
       run: |
-        python skare3_tools/actions/build/files/build.py --arch-specific sot/Ska.Numpy --tag master
+        python skare3_tools/actions/build/files/build.py ska3-core \
+        --arch-specific --tag 2020.13+shiny --skare3-branch 2020.13+shiny --ska3-overwrite-version 2020.13rc5+shiny
       env:
         CONDA_PASSWORD: ${{ secrets.CONDA_PASSWORD }}
         GIT_USERNAME: chandra-xray
@@ -90,10 +91,10 @@ jobs:
           path: package
       - name: Update channel
         run: |
-          rsync -a package/ ${CONDA_CHANNEL_DIR}
+          echo rsync -a package/ ${CONDA_CHANNEL_DIR}
           for d in noarch linux-64 osx-64 win-64;
           do
-            ls package/$d;
+            echo conda index package/$d;
           done;
         env:
           CONDA_CHANNEL_DIR: /proj/sot/ska/www/ASPECT/ska3-conda/masters
