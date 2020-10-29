@@ -26,7 +26,7 @@ jobs:
                 ${PACKAGE}==${TAG}
           source activate ${PACKAGE}-${TAG}
           run_testr --root /export/jgonzale/ska_testr \
-                    --test-spec ${{ github.event.client_payload.package }} \
+                    --test-spec ${{ github.event.client_payload.test_spec }} \
                     --outputs-dir /export/jgonzale/ska_testr/${STREAM}_tests
         env:
           CONDA_PASSWORD: ${{ secrets.CONDA_PASSWORD }}
