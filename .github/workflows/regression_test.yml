@@ -23,7 +23,7 @@ jobs:
                 ${PACKAGE}==${TAG}
           source activate ${PACKAGE}-${TAG}
           run_testr --root /export/jgonzale/ska_testr \
-                    --test-spec test_spec_SKA3_HEAD \
+                    --test-spec test_spec_proseco \
                     --outputs-dir /export/jgonzale/ska_testr/${STREAM}_tests
         env:
           CONDA_PASSWORD: ${{ secrets.CONDA_PASSWORD }}
