@@ -11,6 +11,6 @@ jobs:
     name: Dispatch Test
     steps:
       - name: Dispatch Test
-        if: ${{ github.event.client_payload.name }}
+        if: ${{ github.event.client_payload.name && github.event.client_payload.value }}
         run: |
           echo name: ${{ github.event.client_payload.name }}
