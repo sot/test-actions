@@ -5,6 +5,7 @@ on:
     types:
     - regression-test
 
+jobs:
   regression-test:
     runs-on: head
     name: Regression Test
