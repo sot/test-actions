@@ -5,6 +5,7 @@ on:
     types:
     - dispatch-test
 
+jobs:
   dispatch-test:
     runs-on: ubuntu-latest
     name: Dispatch Test
