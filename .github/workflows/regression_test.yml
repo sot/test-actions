@@ -1,0 +1,29 @@
+name: Ska3 Regression Test
+
+on:
+  repository_dispatch:
+    types:
+    - regression-test
+
+  regression-test:
+    runs-on: head
+    name: Regression Test
+    if: ${{ github.event.client_payload.package && github.event.client_payload.release_tag && github.event.client_payload.stream }}
+    steps:
+      - name: Regression Test
+        run: |
+          TAG=${{ github.event.client_payload.release_tag }}
+          PACKAGE=${{ github.event.client_payload.package }}
+          STREAM=${{ github.event.client_payload.stream }}
+          conda create -y -n ${PACKAGE}-${TAG} --override-channels \
+                -c https://ska:${CONDA_PASSWORD}@cxc.cfa.harvard.edu/mta/ASPECT/ska3-conda/test \
+                -c https://ska:${CONDA_PASSWORD}@cxc.cfa.harvard.edu/mta/ASPECT/ska3-conda/masters  \
+                -c https://ska:${CONDA_PASSWORD}@cxc.cfa.harvard.edu/mta/ASPECT/ska3-conda/shiny \
+                ${PACKAGE}==${TAG}
+          source activate ${PACKAGE}-${TAG}
+          run_testr --root /export/jgonzale/ska_testr \
+                    --test-spec test_spec_SKA3_HEAD \
+                    --outputs-dir /export/jgonzale/ska_testr/${STREAM}_tests
+        env:
+          CONDA_PASSWORD: ${{ secrets.CONDA_PASSWORD }}
+          SKA: /proj/sot/ska
