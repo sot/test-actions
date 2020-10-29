@@ -1,0 +1,14 @@
+name: Repository Dispatch
+
+on:
+  repository_dispatch:
+    types:
+    - dispatch-test
+
+  dispatch-test:
+    runs-on: ubuntu-latest
+    name: Dispatch Test
+    steps:
+      - name: Regression Test
+        run: |
+          echo name: ${{ github.event.client_payload.name }}
