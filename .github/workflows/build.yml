@@ -1,4 +1,5 @@
 name: Conda build
+
 on:
   repository_dispatch:
     types:
@@ -20,7 +21,7 @@ jobs:
         -e CONDA_PASSWORD -e GIT_USERNAME -e GIT_PASSWORD
         docker.pkg.github.com/sot/skare3/centos7-builder:latest
         ska3-core
-        --arch-specific --tag 2020.13+shiny --skare3-branch 2020.13+shiny --ska3-overwrite-version 2020.13rc5+shiny
+        --tag 2020.13+shiny --skare3-branch 2020.13+shiny --ska3-overwrite-version 2020.13rc5+shiny
       env:
         CONDA_PASSWORD: ${{ secrets.CONDA_PASSWORD }}
         GIT_USERNAME: chandra-xray
