@@ -1,6 +1,9 @@
 name: Share data between jobs
 
-on: [repository_dispatch]
+on:
+  repository_dispatch:
+    types:
+    - artifact-test
 
 jobs:
   job_1:
