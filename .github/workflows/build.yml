@@ -47,7 +47,7 @@ jobs:
     if: ${{
         github.event.client_payload.package &&
         github.event.client_payload.tag &&
-        !github.event.client_payload.noarch
+        github.event.client_payload.arch
       }}
     strategy:
       fail-fast: false
