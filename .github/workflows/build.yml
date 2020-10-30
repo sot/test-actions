@@ -19,7 +19,7 @@ jobs:
     - name: Build
       id: build
       run: >
-        TAG=${{ github.event.client_payload.release_tag }}
+        TAG=${{ github.event.client_payload.tag }}
         PACKAGE=${{ github.event.client_payload.package }}
         docker run --rm  --name builder -v $GITHUB_WORKSPACE:/github/workspace -w /github/workspace
         -e CONDA_PASSWORD -e GIT_USERNAME -e GIT_PASSWORD
@@ -68,9 +68,9 @@ jobs:
     - name: Build Package
       shell: bash -l {0}
       run: |
-        TAG=${{ github.event.client_payload.release_tag }}
+        TAG=${{ github.event.client_payload.tag }}
         PACKAGE=${{ github.event.client_payload.package }}
-        python skare3_tools/actions/build/files/build.py ska3-core \
+        python skare3_tools/actions/build/files/build.py \
         ${PACKAGE} --force --arch-specific --tag ${TAG}
       env:
         CONDA_PASSWORD: ${{ secrets.CONDA_PASSWORD }}
