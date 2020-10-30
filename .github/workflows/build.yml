@@ -9,6 +9,10 @@ jobs:
   build-linux:
     runs-on: ubuntu-latest
     name: Build on Linux
+    if: ${{ github.event.client_payload.package &&
+            github.event.client_payload.release_tag &&
+            github.event.client_payload.stream &&
+            github.event.client_payload.test_spec }}
     steps:
     - name: Login to GitHub Package Registry
       run: docker login docker.pkg.github.com -u $GITHUB_ACTOR -p ${{ secrets.GITHUB_TOKEN }}
@@ -20,8 +24,7 @@ jobs:
         docker run --rm  --name builder -v $GITHUB_WORKSPACE:/github/workspace -w /github/workspace
         -e CONDA_PASSWORD -e GIT_USERNAME -e GIT_PASSWORD
         docker.pkg.github.com/sot/skare3/centos7-builder:latest
-        ska3-core
-        --tag 2020.13+shiny --skare3-branch 2020.13+shiny --ska3-overwrite-version 2020.13rc5+shiny
+        {{ github.event.client_payload.package }} --force --tag ${{ github.event.client_payload.tag }}
       env:
         CONDA_PASSWORD: ${{ secrets.CONDA_PASSWORD }}
         GIT_USERNAME: chandra-xray
@@ -41,6 +44,10 @@ jobs:
   build-other:
     runs-on: ${{ matrix.os }}-latest
     name: Build on ${{ matrix.os }}
+    if: ${{ github.event.client_payload.package &&
+            github.event.client_payload.release_tag &&
+            github.event.client_payload.stream &&
+            github.event.client_payload.test_spec }}
     strategy:
       fail-fast: false
       matrix:
@@ -64,7 +71,7 @@ jobs:
       shell: bash -l {0}
       run: |
         python skare3_tools/actions/build/files/build.py ska3-core \
-        --arch-specific --tag 2020.13+shiny --skare3-branch 2020.13+shiny --ska3-overwrite-version 2020.13rc5+shiny
+        --force --arch-specific {{ github.event.client_payload.package }} --tag ${{ github.event.client_payload.tag }}
       env:
         CONDA_PASSWORD: ${{ secrets.CONDA_PASSWORD }}
         GIT_USERNAME: chandra-xray
@@ -81,24 +88,3 @@ jobs:
           !builds/*/*repodata*
           !builds/*/index.html
 
-  update-channel:
-    runs-on: head
-    name: Update Conda Channel
-    needs: [build-linux, build-other]
-    steps:
-      - name: Get linux package
-        uses: actions/download-artifact@v2
-        with:
-          name: conda-package
-          path: package
-      - name: Update channel
-        run: |
-          echo rsync -a package/ ${CONDA_CHANNEL_DIR}
-          for d in noarch linux-64 osx-64 win-64;
-          do
-            echo conda index package/$d;
-            echo package/$d;
-            ls -l package/$d;
-          done;
-        env:
-          CONDA_CHANNEL_DIR: /proj/sot/ska/www/ASPECT/ska3-conda/masters
