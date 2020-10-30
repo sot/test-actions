@@ -19,10 +19,12 @@ jobs:
     - name: Build
       id: build
       run: >
+        TAG=${{ github.event.client_payload.release_tag }}
+        PACKAGE=${{ github.event.client_payload.package }}
         docker run --rm  --name builder -v $GITHUB_WORKSPACE:/github/workspace -w /github/workspace
         -e CONDA_PASSWORD -e GIT_USERNAME -e GIT_PASSWORD
         docker.pkg.github.com/sot/skare3/centos7-builder:latest
-        {{ github.event.client_payload.package }} --force --tag ${{ github.event.client_payload.tag }}
+        ${PACKAGE} --force --tag ${TAG}
       env:
         CONDA_PASSWORD: ${{ secrets.CONDA_PASSWORD }}
         GIT_USERNAME: chandra-xray
@@ -66,8 +68,10 @@ jobs:
     - name: Build Package
       shell: bash -l {0}
       run: |
+        TAG=${{ github.event.client_payload.release_tag }}
+        PACKAGE=${{ github.event.client_payload.package }}
         python skare3_tools/actions/build/files/build.py ska3-core \
-        --force --arch-specific {{ github.event.client_payload.package }} --tag ${{ github.event.client_payload.tag }}
+        ${PACKAGE} --force --arch-specific --tag ${TAG}
       env:
         CONDA_PASSWORD: ${{ secrets.CONDA_PASSWORD }}
         GIT_USERNAME: chandra-xray
