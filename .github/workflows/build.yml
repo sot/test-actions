@@ -10,9 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     name: Build on Linux
     if: ${{ github.event.client_payload.package &&
-            github.event.client_payload.release_tag &&
-            github.event.client_payload.stream &&
-            github.event.client_payload.test_spec }}
+            github.event.client_payload.tag }}
     steps:
     - name: Login to GitHub Package Registry
       run: docker login docker.pkg.github.com -u $GITHUB_ACTOR -p ${{ secrets.GITHUB_TOKEN }}
@@ -45,9 +43,7 @@ jobs:
     runs-on: ${{ matrix.os }}-latest
     name: Build on ${{ matrix.os }}
     if: ${{ github.event.client_payload.package &&
-            github.event.client_payload.release_tag &&
-            github.event.client_payload.stream &&
-            github.event.client_payload.test_spec }}
+            github.event.client_payload.tag }}
     strategy:
       fail-fast: false
       matrix:
