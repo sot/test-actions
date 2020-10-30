@@ -44,8 +44,11 @@ jobs:
   build-other:
     runs-on: ${{ matrix.os }}-latest
     name: Build on ${{ matrix.os }}
-    if: ${{ github.event.client_payload.package &&
-            github.event.client_payload.tag }}
+    if: ${{
+        github.event.client_payload.package &&
+        github.event.client_payload.tag &&
+        !github.event.client_payload.noarch
+      }}
     strategy:
       fail-fast: false
       matrix:
