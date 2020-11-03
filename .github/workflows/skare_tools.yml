@@ -15,7 +15,7 @@ jobs:
           python-version: "3.8"
           channels: https://ska:${{ secrets.CONDA_PASSWORD }}@cxc.cfa.harvard.edu/mta/ASPECT/ska3-conda/shiny
       - name: dependencies
-        run: conda install --override-channels -c https://ska:$CONDA_PASSWORD@cxc.cfa.harvard.edu/mta/ASPECT/ska3-conda/shiny jinja2==2.9.6 skare3_tools
+        run: conda install --override-channels -c https://ska:$CONDA_PASSWORD@cxc.cfa.harvard.edu/mta/ASPECT/ska3-conda/shiny jinja2==2.11.2 skare3_tools
       - name: test
         run: |
           python -c "import skare3_tools.packages; pkgs = skare3_tools.packages.get_package_list(); print(pkgs[0])"
