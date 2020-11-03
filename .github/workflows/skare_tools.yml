@@ -7,8 +7,7 @@ on:
 jobs:
   skare-tools:
     runs-on: ubuntu-latest
-    name: Combine Arch
-    needs: [generate-json]
+    name: Test
     steps:
       - uses: sot/setup-miniconda@v1
         with:
