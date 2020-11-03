@@ -1,0 +1,22 @@
+---
+name: Ska3 tools test
+on:
+  repository_dispatch:
+    types: [skare3-tools]
+
+jobs:
+  skare-tools:
+    runs-on: ubuntu-latest
+    name: Combine Arch
+    needs: [generate-json]
+    steps:
+      - uses: sot/setup-miniconda@v1
+        with:
+          miniconda-version: "py38_4.8.3"
+          python-version: "3.8"
+          channels: https://ska:${{ secrets.CONDA_PASSWORD }}@cxc.cfa.harvard.edu/mta/ASPECT/ska3-conda/shiny
+      - name: dependencies
+        run: conda install jinja2 skare3_tools
+      - name: test
+        run: |
+          python -c "import skare3_tools.packages; pkgs = skare3_tools.packages.get_package_list(); print(pkgs[0])"
