@@ -14,21 +14,32 @@ jobs:
       matrix:
         os: ["ubuntu", "macos", "windows"]
     steps:
+      - name: Checkout skare3_tools
+        uses: actions/checkout@v2
+        with:
+          ref: improvements
+          path: skare3_tools
       - uses: sot/setup-miniconda@v1
         with:
           miniconda-version: "py38_4.8.3"
           python-version: "3.8"
-          channels: https://ska:${{ secrets.CONDA_PASSWORD }}@cxc.cfa.harvard.edu/mta/ASPECT/ska3-conda
+          channels: https://ska:${{ secrets.CONDA_PASSWORD }}@cxc.cfa.harvard.edu/mta/ASPECT/ska3-conda/flight
       - name: ska3-core
         shell: bash -l {0}
         run: |
           conda install -y ska3-core
-          conda uninstall -y --force ska3-core
+          conda install --strict-channel-priority --override-channels -c https://icxc.cfa.harvard.edu/aspect/ska3-conda/flight -c defaults -c conda-forge mamba
       - if: ${{ github.event.client_payload.update }}
         run: conda update -y -c defaults ${{ github.event.client_payload.update }}
       - if: ${{ github.event.client_payload.install }}
         run: conda install -y -c defaults ${{ github.event.client_payload.install }}
       - run: conda list --json > ska3-core-${ARCH}.json
+      - run: python ./skare3_tools/skare3_tools/conda.py --directory packages/${{ matrix.os }} --exclude-channel  aspect/ska3-conda/flight
+      - name: Save packages
+        uses: actions/upload-artifact@v2
+        with:
+          name: conda-pkgs-${{ matrix.os }}
+          path: packages
       - name: Save
         uses: actions/upload-artifact@v2
         with:
