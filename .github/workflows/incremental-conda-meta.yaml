@@ -17,6 +17,7 @@ jobs:
       - name: Checkout skare3_tools
         uses: actions/checkout@v2
         with:
+          repository: skare3_tools
           ref: improvements
           path: skare3_tools
       - uses: sot/setup-miniconda@v1
@@ -61,6 +62,7 @@ jobs:
       - name: Checkout skare3
         uses: actions/checkout@v2
         with:
+          repository: skare3
           ref: ${{ github.event.client_payload.skare3_branch }}
           path: skare3
       - name: Get json files
