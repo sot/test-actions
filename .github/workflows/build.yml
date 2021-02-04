@@ -60,7 +60,7 @@ jobs:
         repository: sot/skare3_tools
         ref: shiny
         path: skare3_tools
-    - uses: sot/setup-miniconda@v1
+    - uses: sot/setup-miniconda@v2
       with:
         miniconda-version: "py38_4.8.3"
         python-version: "3.8"
@@ -90,3 +90,26 @@ jobs:
           !builds/*/*repodata*
           !builds/*/index.html
 
+
+update-channel:
+    runs-on: head
+    name: Update Conda Channel
+    needs: [build-linux, build-other]
+    steps:
+      - name: Get linux package
+        uses: actions/download-artifact@v2
+        with:
+          name: conda-package
+          path: package
+      - name: Update channel
+        run: |
+          rsync -a package/ ${CONDA_CHANNEL_DIR}
+          for d in noarch linux-64 osx-64 win-64;
+          do
+            if [ -d "${CONDA_CHANNEL_DIR}/$d" ];
+            then
+              conda index ${CONDA_CHANNEL_DIR}/$d;
+            fi
+          done;
+        env:
+          CONDA_CHANNEL_DIR: /proj/sot/ska/www/ASPECT/ska3-conda/masters
