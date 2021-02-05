@@ -25,20 +25,24 @@ jobs:
           miniconda-version: "py38_4.8.3"
           python-version: "3.8"
           channels: https://ska:${{ secrets.CONDA_PASSWORD }}@cxc.cfa.harvard.edu/mta/ASPECT/ska3-conda/flight
-      - name: ska3-core
+      - name: install ska3-core
         shell: bash -l {0}
         run: |
           conda install -y ska3-core
           conda install --strict-channel-priority --override-channels -c https://ska:${CONDA_PASSWORD}@cxc.cfa.harvard.edu/mta/ASPECT/ska3-conda/flight -c defaults -c conda-forge mamba
-      - if: ${{ github.event.client_payload.update }}
+      - name: update packages
+        if: ${{ github.event.client_payload.update }}
         shell: bash -l {0}
         run: conda update -y -c defaults ${{ github.event.client_payload.update }}
-      - if: ${{ github.event.client_payload.install }}
+      - name: install new packages
+        if: ${{ github.event.client_payload.install }}
         shell: bash -l {0}
         run: conda install -y -c defaults ${{ github.event.client_payload.install }}
-      - run: conda list --json > ska3-core-${ARCH}.json
-      - shell: bash -l {0}
+      - name: save conda packages
+        shell: bash -l {0}
         run: |
+          echo creating ska3-core-${{ matrix.os }}.json
+          conda list --json > ska3-core-${{ matrix.os }}.json
           python --version
           python ./skare3_tools/skare3_tools/conda.py --directory packages/${{ matrix.os }} --exclude-channel  aspect/ska3-conda/flight
       - name: Save packages
