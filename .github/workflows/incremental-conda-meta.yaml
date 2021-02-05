@@ -29,7 +29,7 @@ jobs:
         shell: bash -l {0}
         run: |
           conda install -y ska3-core
-          conda install --strict-channel-priority --override-channels -c https://icxc.cfa.harvard.edu/aspect/ska3-conda/flight -c defaults -c conda-forge mamba
+          conda install --strict-channel-priority --override-channels -c https://ska:${CONDA_PASSWORD}@cxc.cfa.harvard.edu/mta/ASPECT/ska3-conda/flight -c defaults -c conda-forge mamba
       - if: ${{ github.event.client_payload.update }}
         run: conda update -y -c defaults ${{ github.event.client_payload.update }}
       - if: ${{ github.event.client_payload.install }}
