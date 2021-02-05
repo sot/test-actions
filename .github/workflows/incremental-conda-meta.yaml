@@ -31,11 +31,14 @@ jobs:
           conda install -y ska3-core
           conda install --strict-channel-priority --override-channels -c https://ska:${CONDA_PASSWORD}@cxc.cfa.harvard.edu/mta/ASPECT/ska3-conda/flight -c defaults -c conda-forge mamba
       - if: ${{ github.event.client_payload.update }}
+        shell: bash -l {0}
         run: conda update -y -c defaults ${{ github.event.client_payload.update }}
       - if: ${{ github.event.client_payload.install }}
+        shell: bash -l {0}
         run: conda install -y -c defaults ${{ github.event.client_payload.install }}
       - run: conda list --json > ska3-core-${ARCH}.json
-      - run: |
+      - shell: bash -l {0}
+        run: |
           python3 --version
           python3 ./skare3_tools/skare3_tools/conda.py --directory packages/${{ matrix.os }} --exclude-channel  aspect/ska3-conda/flight
       - name: Save packages
