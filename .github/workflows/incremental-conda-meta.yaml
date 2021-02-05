@@ -81,11 +81,9 @@ jobs:
         run: |
           ./skare3/combine_arch_meta.py --name ska3-core --version ${SKA3_VERSION} \
             --out pkg_defs/ska3-core/meta.yaml \
-            --env linux=json/ska3-flight-ubuntu.json \
-            --env osx=json/ska3-flight-macos.json \
-            --env win=json/ska3-flight-windows.json \
-            --not-in skare3/pkg_defs/ska3-flight-latest/meta.yaml \
-            --exclude ska3-flight
+            --env linux=json/ska3-core-ubuntu.json \
+            --env osx=json/ska3-core-macos.json \
+            --env win=json/ska3-core-windows.json
       - name: Save package
         uses: actions/upload-artifact@v2
         with:
