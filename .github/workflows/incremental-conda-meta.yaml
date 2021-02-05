@@ -35,7 +35,9 @@ jobs:
       - if: ${{ github.event.client_payload.install }}
         run: conda install -y -c defaults ${{ github.event.client_payload.install }}
       - run: conda list --json > ska3-core-${ARCH}.json
-      - run: python ./skare3_tools/skare3_tools/conda.py --directory packages/${{ matrix.os }} --exclude-channel  aspect/ska3-conda/flight
+      - run: |
+          python --version
+          python ./skare3_tools/skare3_tools/conda.py --directory packages/${{ matrix.os }} --exclude-channel  aspect/ska3-conda/flight
       - name: Save packages
         uses: actions/upload-artifact@v2
         with:
