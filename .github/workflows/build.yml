@@ -52,7 +52,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: ["macos", "windows"]
+        os: ["macos"]
     steps:
     - name: Fetch Skare3-tools
       uses: actions/checkout@v2
@@ -73,6 +73,7 @@ jobs:
       run: |
         TAG=${{ github.event.client_payload.tag }}
         PACKAGE=${{ github.event.client_payload.package }}
+        sudo xcode-select -s "/Applications/Xcode_12.3.app"
         python skare3_tools/actions/build/files/build.py \
         ${PACKAGE} --force --tag ${TAG}
       env:
