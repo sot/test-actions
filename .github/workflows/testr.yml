@@ -1,0 +1,27 @@
+name: Run testr
+on:
+  repository_dispatch:
+    types:
+      - run-testr
+
+jobs:
+  regression-test:
+    runs-on: head
+    name: Regression Tests
+    steps:
+      - name: Fetch ska_testr
+        uses: actions/checkout@v2
+        with:
+          repository: sot/ska_testr
+          ref: master
+          path: ska_testr
+      - name: Regression Tests
+        run: |
+          source activate ska3-masters
+          run_testr --root ./ska_testr --outputs-dir /export/jgonzale/ska_testr/release_tests --include mica
+        env:
+          CONDA_PASSWORD: ${{ secrets.CONDA_PASSWORD }}
+          SKA: /proj/sot/ska
+          SYBASE_OCS: OCS-16_0
+          SYBASE: /soft/SYBASE16.0
+          LD_LIBRARY_PATH: /soft/SYBASE16.0/OCS-16_0/lib
