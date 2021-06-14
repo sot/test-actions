@@ -34,11 +34,11 @@ jobs:
       - name: update packages
         if: ${{ github.event.client_payload.update }}
         shell: bash -l {0}
-        run: conda update -y -c defaults ${{ github.event.client_payload.update }}
+        run: mamba update -y -c defaults ${{ github.event.client_payload.update }}
       - name: install new packages
         if: ${{ github.event.client_payload.install }}
         shell: bash -l {0}
-        run: conda install -y -c defaults ${{ github.event.client_payload.install }}
+        run: mamba install -y -c defaults ${{ github.event.client_payload.install }}
       - name: save conda packages
         shell: bash -l {0}
         run: |
