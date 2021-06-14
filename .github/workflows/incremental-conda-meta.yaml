@@ -46,11 +46,11 @@ jobs:
           echo creating ska3-core-${{ matrix.os }}.json
           conda list --json > ska3-core-${{ matrix.os }}.json
           python --version
-          python ./skare3_tools/skare3_tools/conda.py --directory packages/${{ matrix.os }} --exclude-channel mta/ASPECT/ska3-conda/flight
+          python ./skare3_tools/skare3_tools/conda.py --directory packages --exclude-channel mta/ASPECT/ska3-conda/flight
       - name: Save packages
         uses: actions/upload-artifact@v2
         with:
-          name: conda-pkgs-${{ matrix.os }}
+          name: conda-pkgs
           path: packages
       - name: Save
         uses: actions/upload-artifact@v2
