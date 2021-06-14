@@ -31,6 +31,7 @@ jobs:
           conda install --strict-channel-priority --override-channels -c https://ska:${CONDA_PASSWORD}@cxc.cfa.harvard.edu/mta/ASPECT/ska3-conda/flight -c defaults -c conda-forge mamba
           mamba install -y ska3-core==${{ github.event.client_payload.version }}
           mamba uninstall ska3-core
+          conda info --json
       - name: update packages
         if: ${{ github.event.client_payload.update }}
         shell: bash -l {0}
