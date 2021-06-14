@@ -39,7 +39,7 @@ jobs:
       - name: install new packages
         if: ${{ github.event.client_payload.install }}
         shell: bash -l {0}
-        run: mamba install -y -c defaults ${{ github.event.client_payload.install }}
+        run: mamba install -vvv -y -c defaults ${{ github.event.client_payload.install }}
       - name: save conda packages
         shell: bash -l {0}
         run: |
