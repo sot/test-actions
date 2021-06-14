@@ -1,6 +1,9 @@
 ---
-name: Test
-on: push
+name: Check netrc overwrite bug
+on:
+  repository_dispatch:
+    types: [netrc-overwrite]
+
 jobs:
   build-linux:
     runs-on: head
