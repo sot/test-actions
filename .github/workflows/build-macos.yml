@@ -33,12 +33,13 @@ jobs:
     - name: Build Dependencies
       shell: bash -l {0}
       run: conda install setuptools_scm gitpython conda-build jinja2 pyyaml python=3.8 numpy packaging
+    - name: Select XCode Version
+      run: sudo xcode-select -s "/Applications/${{ github.event.client_payload.xcode }}.app"
     - name: Build Package
       shell: bash -l {0}
       run: |
         TAG=${{ github.event.client_payload.tag }}
         PACKAGE=${{ github.event.client_payload.package }}
-        sudo xcode-select -s "/Applications/${{ github.event.client_payload.xcode }}.app"
         python skare3_tools/actions/build/files/build.py \
         ${PACKAGE} --force --tag ${TAG}
       env:
