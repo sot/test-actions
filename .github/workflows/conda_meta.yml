@@ -18,7 +18,7 @@ jobs:
         with:
           miniconda-version: "py38_4.8.3"
           python-version: "3.8"
-          channels: https://ska:${{ secrets.CONDA_PASSWORD }}@cxc.cfa.harvard.edu/mta/ASPECT/ska3-conda/shiny
+          channels: https://ska:${{ secrets.CONDA_PASSWORD }}@cxc.cfa.harvard.edu/mta/ASPECT/ska3-conda/flight
       - name: Fetch Skare3
         uses: actions/checkout@v2
         with:
@@ -34,13 +34,14 @@ jobs:
       - name: ska3-flight
         shell: bash -l {0}
         run: |
-          mamba install ska3-flight-latest
+          mamba install -c https://ska:${{ secrets.CONDA_PASSWORD }}@cxc.cfa.harvard.edu/mta/ASPECT/ska3-conda/flight quaternion
+          mamba install -c defaults -c conda-forge -c https://ska:${{ secrets.CONDA_PASSWORD }}@cxc.cfa.harvard.edu/mta/ASPECT/ska3-conda/flight ska3-flight-latest
           conda list --json > ska3-flight-${ARCH}.json
       - name: ska3-perl
         if: ${{ matrix.os != 'windows' }}
         shell: bash -l {0}
         run: |
-          mamba install ska3-perl-latest
+          mamba install -c defaults -c conda-forge -c https://ska:${{ secrets.CONDA_PASSWORD }}@cxc.cfa.harvard.edu/mta/ASPECT/ska3-conda/flight ska3-perl-latest
           conda list --json > ska3-perl-${ARCH}.json
       - name: Save
         uses: actions/upload-artifact@v2
