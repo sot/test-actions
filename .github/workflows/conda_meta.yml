@@ -28,7 +28,7 @@ jobs:
       - name: ska3-core
         shell: bash -l {0}
         run: |
-          conda install ska3-core-latest
+          python ./pkg_defs/ska3-core-latest/install_from_scratch.py --meta pkg_defs/ska3-core-latest/meta.yaml
           conda list --json > ska3-core-${ARCH}.json
       - name: ska3-flight
         shell: bash -l {0}
