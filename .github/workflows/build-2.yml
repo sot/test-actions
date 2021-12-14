@@ -7,9 +7,9 @@ on:
 
 jobs:
   build:
-    uses: sot/skare3/.github/workflows/package_build.yml@master
+    uses: sot/skare3/.github/workflows/package_build.yml@reusable_workflows
     with:
-      repository: ${{ github.event.client_payload.package }}
+      meta_packages: ${{ github.event.client_payload.package }}
       tag: ${{ github.event.client_payload.tag }}
       noarch: ${{ !github.event.client_payload.arch }}
     secrets:
