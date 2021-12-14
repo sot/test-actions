@@ -6,7 +6,7 @@ on:
       - conda-build-2
 
 jobs:
-  call-workflow-passing-data:
+  build:
     uses: sot/skare3/.github/workflows/package_build.yml@master
     with:
       repository: ${{ github.event.client_payload.package }}
@@ -17,5 +17,5 @@ jobs:
       CHANDRA_XRAY_TOKEN: ${{ secrets.CHANDRA_XRAY_TOKEN }}
       token: ${{ secrets.GITHUB_TOKEN }}
 
-  call-workflow-passing-data:
+  upload:
     uses: sot/skare3/.github/workflows/package_upload.yml@master
