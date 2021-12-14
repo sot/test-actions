@@ -29,13 +29,12 @@ jobs:
         shell: bash -l {0}
         run: |
           conda install mamba
-          python ./skare3/install_from_scratch.py --meta ./skare3/pkg_defs/ska3-core-latest/meta.yaml
+          python ./skare3/pkg_defs/ska3-core-latest/install_from_scratch.py
           conda list --json > ska3-core-${ARCH}.json
       - name: ska3-flight
         shell: bash -l {0}
         run: |
-          mamba install -c https://ska:${{ secrets.CONDA_PASSWORD }}@cxc.cfa.harvard.edu/mta/ASPECT/ska3-conda/flight quaternion
-          mamba install -c defaults -c conda-forge -c https://ska:${{ secrets.CONDA_PASSWORD }}@cxc.cfa.harvard.edu/mta/ASPECT/ska3-conda/flight ska3-flight-latest
+          python ./skare3/pkg_defs/ska3-flight-latest/install_from_scratch.py
           conda list --json > ska3-flight-${ARCH}.json
       - name: ska3-perl
         if: ${{ matrix.os != 'windows' }}
@@ -51,3 +50,61 @@ jobs:
     env:
       ARCH: ${{ matrix.os }}
       CONDA_PASSWORD: ${{ secrets.CONDA_PASSWORD }}
+
+  combine-arch:
+    runs-on: ubuntu-latest
+    name: Combine Arch
+    needs: [generate-json]
+    steps:
+      - name: Set up Python 3.8
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.8
+      - name: Checkout skare3
+        uses: actions/checkout@v2
+        with:
+          repository: sot/skare3
+          ref: ${{ github.event.client_payload.skare3_branch }}
+          path: skare3
+      - name: Get json files
+        uses: actions/download-artifact@v2
+        with:
+          name: json-files
+          path: json
+      - name: pip
+        run: python -m pip install jinja2 PyYAML
+      - name: ska3-core
+        run: |
+          ./skare3/combine_arch_meta.py --name ska3-core --version ${SKA3_VERSION} \
+            --out pkg_defs/ska3-core/meta.yaml \
+            --env linux=json/ska3-flight-ubuntu.json \
+            --env osx=json/ska3-flight-macos.json \
+            --env win=json/ska3-flight-windows.json \
+            --not-in skare3/pkg_defs/ska3-flight-latest/meta.yaml \
+            --exclude ska3-flight
+      - name: ska3-flight
+        run: |
+          ./skare3/combine_arch_meta.py --name ska3-flight --version ${SKA3_VERSION} \
+            --out pkg_defs/ska3-flight/meta.yaml \
+            --env linux=json/ska3-flight-ubuntu.json \
+            --env osx=json/ska3-flight-macos.json \
+            --env win=json/ska3-flight-windows.json \
+            --in skare3/pkg_defs/ska3-flight-latest/meta.yaml \
+            --include ska3-core \
+            --build "noarch: generic"
+      - name: ska3-perl
+        run: |
+          ./skare3/combine_arch_meta.py --name ska3-perl --version ${SKA3_VERSION} \
+            --out pkg_defs/ska3-perl/meta.yaml \
+            --env linux=json/ska3-perl-ubuntu.json \
+            --env osx=json/ska3-perl-macos.json \
+            --subtract-env linux=json/ska3-flight-ubuntu.json \
+            --subtract-env osx=json/ska3-flight-macos.json \
+            --build "skip: True  # [win]"
+      - name: Save package
+        uses: actions/upload-artifact@v2
+        with:
+          name: conda-meta-yaml
+          path: pkg_defs
+    env:
+      SKA3_VERSION: ${{ github.event.client_payload.version }}
