@@ -9,7 +9,7 @@ jobs:
   call-workflow-passing-data:
     uses: sot/skare3/.github/workflows/package_build.yml@master
     with:
-      package: ${{ github.event.client_payload.package }}
+      repository: ${{ github.event.client_payload.package }}
       tag: ${{ github.event.client_payload.tag }}
       noarch: ${{ !github.event.client_payload.arch }}
     secrets:
