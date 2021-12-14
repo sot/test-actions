@@ -1,0 +1,19 @@
+name: Conda build
+
+on:
+  repository_dispatch:
+    types:
+      - conda-build-2
+
+jobs:
+  call-workflow-passing-data:
+    uses: sot/skare3/.github/workflows/package_build.yml@master
+    with:
+      package: ${{ github.event.client_payload.package }}
+      tag: ${{ github.event.client_payload.tag }}
+      noarch: ${{ !github.event.client_payload.arch }}
+    secrets:
+      CONDA_PASSWORD: ${{ secrets.CONDA_PASSWORD }}
+      CHANDRA_XRAY_TOKEN: ${{ secrets.CHANDRA_XRAY_TOKEN }}
+      token: ${{ secrets.GITHUB_TOKEN }}
+
