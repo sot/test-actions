@@ -17,3 +17,5 @@ jobs:
       CHANDRA_XRAY_TOKEN: ${{ secrets.CHANDRA_XRAY_TOKEN }}
       token: ${{ secrets.GITHUB_TOKEN }}
 
+  call-workflow-passing-data:
+    uses: sot/skare3/.github/workflows/package_upload.yml@master
