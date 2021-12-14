@@ -18,4 +18,5 @@ jobs:
       token: ${{ secrets.GITHUB_TOKEN }}
 
   upload:
+    needs: [build]
     uses: sot/skare3/.github/workflows/package_upload.yml@master
