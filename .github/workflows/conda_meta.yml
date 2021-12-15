@@ -144,7 +144,6 @@ jobs:
         shell: bash -l {0}
         run: |
           conda install conda-build gitpython git
-          cp -fr pkg_defs/* skare3/pkg_defs/
       - name: Debug 2
         shell: bash -l {0}
         working-directory: ./skare3
