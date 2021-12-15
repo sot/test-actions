@@ -138,14 +138,12 @@ jobs:
           repository: sot/skare3
           ref: ${{ github.event.client_payload.skare3_branch }}
           path: skare3
-      - name: Debug 2
+      - name: Copy yaml files
         shell: bash -l {0}
-        working-directory: ./skare3
         run: |
           pwd
-          ls
           cp -fr pkg_defs/* skare3/pkg_defs/
-          ls
+          ls skare3
       - name: Build ska3-flight
         shell: bash -l {0}
         working-directory: ./skare3
