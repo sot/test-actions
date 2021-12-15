@@ -19,12 +19,12 @@ jobs:
           miniconda-version: "py38_4.8.3"
           python-version: "3.8"
           channels: https://ska:${{ secrets.CONDA_PASSWORD }}@cxc.cfa.harvard.edu/mta/ASPECT/ska3-conda/flight
-      - name: Fetch Skare3
+      - name: Checkout Skare3
         uses: actions/checkout@v2
         with:
           repository: sot/skare3
-          path: skare3
           ref: ${{ github.event.client_payload.skare3_branch }}
+          path: skare3
       - name: ska3-core
         shell: bash -l {0}
         run: |
@@ -43,7 +43,7 @@ jobs:
           mamba install -c defaults -c conda-forge -c https://ska:${{ secrets.CONDA_PASSWORD }}@cxc.cfa.harvard.edu/mta/ASPECT/ska3-conda/flight ska3-perl-latest
           conda list --json > ska3-perl-${ARCH}.json
       - name: Save
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v2.2.4
         with:
           name: json-files
           path: ska3-*.json
@@ -60,7 +60,7 @@ jobs:
         uses: actions/setup-python@v2
         with:
           python-version: 3.8
-      - name: Checkout skare3
+      - name: Checkout Skare3
         uses: actions/checkout@v2
         with:
           repository: sot/skare3
@@ -102,9 +102,63 @@ jobs:
             --subtract-env osx=json/ska3-flight-macos.json \
             --build "skip: True  # [win]"
       - name: Save package
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v2.2.4
         with:
           name: conda-meta-yaml
           path: pkg_defs
     env:
       SKA3_VERSION: ${{ github.event.client_payload.version }}
+
+  build-conda:
+    runs-on: ${{ matrix.os }}-latest
+    name: Build ${{ matrix.os }} conda meta-packages
+    needs: [combine-arch]
+    strategy:
+      fail-fast: false
+      matrix:
+        os: ["ubuntu", "macos", "windows"]
+    steps:
+      - name: Get yaml files
+        uses: actions/download-artifact@v2
+        with:
+          name: conda-meta-yaml
+          path: pkg_defs
+      - name: Checkout Skare3
+        uses: actions/checkout@v2
+        with:
+          repository: sot/skare3
+          ref: ${{ github.event.client_payload.skare3_branch }}
+          path: skare3
+      - name: Setup conda environment
+        uses: sot/setup-miniconda@v2
+        with:
+          miniconda-version: "py38_4.8.3"
+          python-version: "3.8"
+      - name: Setup build environment
+        shell: bash -l {0}
+        run: |
+          conda install conda-build gitpython git
+          cp -fr pkg_defs/* skare3/pkg_defs/
+      - name: Build ska3-flight
+        shell: bash -l {0}
+        working-directory: ./skare3
+        run: >
+          python ./ska_builder.py ska3-flight
+      - name: Build ska3-core and ska3-perl
+        shell: bash -l {0}
+        working-directory: ./skare3
+        run: |
+          python ./ska_builder.py ska3-core
+          python ./ska_builder.py ska3-perl
+      - name: Gather packages
+        shell: bash -l {0}
+        working-directory: ./skare3
+        run: |
+          rm -f builds/*/*json builds/*/*repodata* builds/*/index*
+          mkdir -p builds/osx-64 builds/win-64 builds/linux-64 ../pkg_defs
+          mv builds/osx-64 builds/win-64 builds/linux-64 conda_packages
+      - name: Save conda packages
+        uses: actions/upload-artifact@v2.2.4
+        with:
+          name: conda-packages
+          path: skare3/conda_packages
