@@ -129,12 +129,6 @@ jobs:
           repository: sot/skare3
           ref: ${{ github.event.client_payload.skare3_branch }}
           path: skare3
-      - name: Debug 1
-        shell: bash -l {0}
-        working-directory: ./skare3
-        run: |
-          pwd
-          ls
       - name: Setup conda environment
         uses: sot/setup-miniconda@v2
         with:
@@ -145,6 +139,12 @@ jobs:
         run: |
           conda install conda-build gitpython git
           cp -fr pkg_defs/* skare3/pkg_defs/
+      - name: Debug 1
+        shell: bash -l {0}
+        working-directory: ./skare3
+        run: |
+          pwd
+          ls
       - name: Build ska3-flight
         shell: bash -l {0}
         working-directory: ./skare3
