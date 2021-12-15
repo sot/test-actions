@@ -132,7 +132,6 @@ jobs:
         shell: bash -l {0}
         run: |
           conda install conda-build gitpython git
-          cp -fr pkg_defs/* skare3/pkg_defs/
       - name: Checkout Skare3
         uses: actions/checkout@v2
         with:
@@ -144,6 +143,8 @@ jobs:
         working-directory: ./skare3
         run: |
           pwd
+          ls
+          cp -fr pkg_defs/* skare3/pkg_defs/
           ls
       - name: Build ska3-flight
         shell: bash -l {0}
