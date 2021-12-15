@@ -134,12 +134,18 @@ jobs:
         with:
           miniconda-version: "py38_4.8.3"
           python-version: "3.8"
+      - name: Debug 1
+        shell: bash -l {0}
+        working-directory: ./skare3
+        run: |
+          pwd
+          ls
       - name: Setup build environment
         shell: bash -l {0}
         run: |
           conda install conda-build gitpython git
           cp -fr pkg_defs/* skare3/pkg_defs/
-      - name: Debug 1
+      - name: Debug 2
         shell: bash -l {0}
         working-directory: ./skare3
         run: |
@@ -150,12 +156,6 @@ jobs:
         working-directory: ./skare3
         run: >
           python ./ska_builder.py ska3-flight
-      - name: Debug 2
-        shell: bash -l {0}
-        working-directory: ./skare3
-        run: |
-          pwd
-          ls
       - name: Build ska3-core and ska3-perl
         shell: bash -l {0}
         working-directory: ./skare3
