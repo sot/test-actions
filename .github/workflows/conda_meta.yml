@@ -142,12 +142,12 @@ jobs:
         shell: bash -l {0}
         run: |
           pwd
-          ls skare3
-          cp pkg_defs/ska3-core/meta.yaml skare3/pkg_defs/ska3-core/meta.yaml
-          cp pkg_defs/ska3-flight/meta.yaml skare3/pkg_defs/ska3-flight/meta.yaml
-          cp pkg_defs/ska3-perl/meta.yaml skare3/pkg_defs/ska3-perl/meta.yaml
+          ls ./skare3
+          cp ./pkg_defs/ska3-core/meta.yaml ./skare3/pkg_defs/ska3-core/meta.yaml
+          cp ./pkg_defs/ska3-flight/meta.yaml ./skare3/pkg_defs/ska3-flight/meta.yaml
+          cp ./pkg_defs/ska3-perl/meta.yaml ./skare3/pkg_defs/ska3-perl/meta.yaml
           pwd
-          ls skare3
+          ls ./skare3
       - name: Build ska3-flight
         shell: bash -l {0}
         working-directory: ./skare3
