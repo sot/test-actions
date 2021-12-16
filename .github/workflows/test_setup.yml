@@ -13,20 +13,11 @@ jobs:
       matrix:
         os: ["windows"]
     steps:
-      - name: Setup conda environment
-        uses: sot/setup-miniconda@v2
-        with:
-          miniconda-version: "py38_4.8.3"
-          python-version: "3.8"
       - name: Debug 1
         shell: bash -l {0}
         run: |
           pwd
           ls
-      - name: Setup build environment
-        shell: bash -l {0}
-        run: |
-          conda install conda-build gitpython git
       - name: Checkout Skare3
         uses: actions/checkout@v2
         with:
@@ -38,9 +29,3 @@ jobs:
         run: |
           pwd
           ls
-          ls ./skare3
-          cp ./pkg_defs/ska3-core/meta.yaml ./skare3/pkg_defs/ska3-core/meta.yaml
-          cp ./pkg_defs/ska3-flight/meta.yaml ./skare3/pkg_defs/ska3-flight/meta.yaml
-          cp ./pkg_defs/ska3-perl/meta.yaml ./skare3/pkg_defs/ska3-perl/meta.yaml
-          pwd
-          ls ./skare3
