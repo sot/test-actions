@@ -11,9 +11,6 @@ jobs:
     steps:
       - name: Setup conda environment
         uses: conda-incubator/setup-miniconda@v2
-        with:
-          miniconda-version: "py38_4.8.3"
-          python-version: "3.8"
       - name: Conda build
         if: ${{ github.event.client_payload.build }}
         shell: bash -l {0}
