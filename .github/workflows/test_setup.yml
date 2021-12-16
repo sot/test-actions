@@ -1,0 +1,52 @@
+---
+name: Ska3 conda meta.yaml
+on:
+  repository_dispatch:
+    types: [test-setup]
+
+jobs:
+  build-conda:
+    runs-on: ${{ matrix.os }}-latest
+    name: Build ${{ matrix.os }} conda meta-packages
+    strategy:
+      fail-fast: false
+      matrix:
+        os: ["windows"]
+    steps:
+      - name: Get yaml files
+        uses: actions/download-artifact@v2
+        with:
+          name: conda-meta-yaml
+          path: pkg_defs
+      - name: Setup conda environment
+        uses: sot/setup-miniconda@v2
+        with:
+          miniconda-version: "py38_4.8.3"
+          python-version: "3.8"
+      - name: Debug 1
+        shell: bash -l {0}
+        run: |
+          pwd
+          ls
+          ls ./skare3
+      - name: Setup build environment
+        shell: bash -l {0}
+        run: |
+          conda install conda-build gitpython git
+      - name: Checkout Skare3
+        uses: actions/checkout@v2
+        with:
+          repository: sot/skare3
+          ref: ${{ github.event.client_payload.skare3_branch }}
+          path: skare3
+      - name: Copy yaml files
+        shell: bash -l {0}
+        run: |
+          pwd
+          ls
+          ls ./skare3
+          cp ./pkg_defs/ska3-core/meta.yaml ./skare3/pkg_defs/ska3-core/meta.yaml
+          cp ./pkg_defs/ska3-flight/meta.yaml ./skare3/pkg_defs/ska3-flight/meta.yaml
+          cp ./pkg_defs/ska3-perl/meta.yaml ./skare3/pkg_defs/ska3-perl/meta.yaml
+          pwd
+          ls ./skare3
