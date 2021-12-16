@@ -23,7 +23,6 @@ jobs:
         run: |
           pwd
           ls
-          ls ./skare3
       - name: Setup build environment
         shell: bash -l {0}
         run: |
