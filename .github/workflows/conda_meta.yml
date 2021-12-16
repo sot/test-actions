@@ -131,7 +131,7 @@ jobs:
       - name: Setup build environment
         shell: bash -l {0}
         run: |
-          conda install conda-build gitpython git
+          conda install conda-build gitpython
       - name: Checkout Skare3
         uses: actions/checkout@v2
         with:
