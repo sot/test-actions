@@ -14,12 +14,8 @@ jobs:
         with:
           miniconda-version: "py38_4.8.3"
           python-version: "3.8"
-      - name: Debug 1
-        shell: bash -l {0}
-        run: |
-          pwd
-          ls
       - name: Setup build environment
+        if: ${{ github.event.client_payload.build }}
         shell: bash -l {0}
         run: |
           pwd
@@ -30,11 +26,12 @@ jobs:
       - name: Checkout Skare3
         uses: actions/checkout@v2
         with:
-          repository: sot/skare3
-          ref: ska3-core
-          path: skare3
+          repository: conda-incubator/setup-miniconda
+          ref: master
+          path: setup
       - name: Copy yaml files
         shell: bash -l {0}
         run: |
           pwd
           ls
+          cd setup
