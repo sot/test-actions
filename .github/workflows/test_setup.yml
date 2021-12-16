@@ -35,3 +35,4 @@ jobs:
           pwd
           ls
           cd setup
+          pwd
