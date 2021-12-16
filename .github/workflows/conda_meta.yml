@@ -142,6 +142,7 @@ jobs:
         shell: bash -l {0}
         run: |
           pwd
+          ls
           ls ./skare3
           cp ./pkg_defs/ska3-core/meta.yaml ./skare3/pkg_defs/ska3-core/meta.yaml
           cp ./pkg_defs/ska3-flight/meta.yaml ./skare3/pkg_defs/ska3-flight/meta.yaml
