@@ -1,5 +1,5 @@
 ---
-name: Ska3 conda meta.yaml
+name: Test Setup
 on:
   repository_dispatch:
     types: [test-setup]
@@ -14,25 +14,26 @@ jobs:
         with:
           miniconda-version: "py38_4.8.3"
           python-version: "3.8"
-      - name: Setup build environment
+      - name: Conda build
         if: ${{ github.event.client_payload.build }}
         shell: bash -l {0}
         run: |
           pwd
           ls
-          conda install conda-build gitpython git
+          conda list
           pwd
           ls
-      - name: Checkout Skare3
+      - name: Checkout
         uses: actions/checkout@v2
         with:
           repository: conda-incubator/setup-miniconda
           ref: master
           path: setup
-      - name: Copy yaml files
+      - name: Change directory
         shell: bash -l {0}
         run: |
           pwd
           ls
           cd setup
           pwd
+          ls
