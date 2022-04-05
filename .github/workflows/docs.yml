@@ -1,0 +1,14 @@
+---
+name: Deploy Docs
+on:
+  repository_dispatch:
+    types:
+    - build-docs
+
+jobs:
+  docs:
+    uses: sot/skare3/.github/workflows/package_docs.yml@docs_workflow
+    with:
+      repository: sot/eng_archive
+    secrets:
+      CHANDRA_XRAY_TOKEN: ${{ secrets.CHANDRA_XRAY_TOKEN }}
