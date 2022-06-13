@@ -1,0 +1,32 @@
+name: Test runner with conda
+on:
+  repository_dispatch:
+    types:
+      - test-runner
+
+jobs:
+  conda-test:
+    runs-on: fido
+    name: Testing Runner
+    steps:
+      - name: Fetch ska_testr
+        uses: actions/checkout@v2
+        with:
+          repository: sot/ska_testr
+          ref: master
+          path: ska_testr
+      - name: Create and activate
+        run: |
+          conda create -y -n ska3-masters --override-channels \
+                -c https://ska:${CONDA_PASSWORD}@cxc.cfa.harvard.edu/mta/ASPECT/ska3-conda/test \
+                -c https://ska:${CONDA_PASSWORD}@cxc.cfa.harvard.edu/mta/ASPECT/ska3-conda/masters  \
+                -c https://ska:${CONDA_PASSWORD}@cxc.cfa.harvard.edu/mta/ASPECT/ska3-conda/flight \
+                ${{ matrix.package }}==${RELEASE_TAG}
+          source activate ska3-masters
+          conda list
+        env:
+          CONDA_PASSWORD: ${{ secrets.CONDA_PASSWORD }}
+          SKA: /proj/sot/ska
+          SYBASE_OCS: OCS-16_0
+          SYBASE: /soft/SYBASE16.0
+          LD_LIBRARY_PATH: /soft/SYBASE16.0/OCS-16_0/lib
