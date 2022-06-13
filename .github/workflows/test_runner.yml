@@ -22,7 +22,7 @@ jobs:
                 -c https://ska:${CONDA_PASSWORD}@cxc.cfa.harvard.edu/mta/ASPECT/ska3-conda/test \
                 -c https://ska:${CONDA_PASSWORD}@cxc.cfa.harvard.edu/mta/ASPECT/ska3-conda/masters  \
                 -c https://ska:${CONDA_PASSWORD}@cxc.cfa.harvard.edu/mta/ASPECT/ska3-conda/flight \
-                ska3-masters
+                ska3-core-latest ska3-flight-latest ska3-perl-latest
           source activate ska3-masters
           conda list
         env:
