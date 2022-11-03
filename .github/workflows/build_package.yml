@@ -7,7 +7,7 @@ on:
 
 jobs:
   build:
-    uses: sot/trst-actions/.github/workflows/package_build.yml@master
+    uses: sot/test-actions/.github/workflows/package_build.yml@master
     with:
       repository: ${{ github.event.client_payload.package }}
       tag: ${{ github.event.client_payload.tag }}
