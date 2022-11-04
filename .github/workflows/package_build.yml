@@ -48,6 +48,7 @@ jobs:
       with:
         miniconda-version: "py38_4.12.0"
         python-version: "3.8"
+        channel-priority: strict
         channels: https://ska:${{ secrets.CONDA_PASSWORD }}@cxc.cfa.harvard.edu/mta/ASPECT/ska3-conda/shiny
     - name: Show channels
       run: conda config --show channels
