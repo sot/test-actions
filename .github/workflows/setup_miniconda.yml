@@ -22,4 +22,5 @@ jobs:
     #   run: conda config --remove channels defaults
     - name: Show channels
       run: conda config --show channels
-
+    - name: condarc
+      run: cat /Users/runner/.condarc
