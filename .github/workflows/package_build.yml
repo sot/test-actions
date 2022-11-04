@@ -46,9 +46,8 @@ jobs:
         path: skare3_tools
     - uses: conda-incubator/setup-miniconda@v2
       with:
-        miniconda-version: "py38_4.12.0"
+        miniconda-version: "py38_4.8.3"
         python-version: "3.8"
-        channel-priority: strict
         channels: https://ska:${{ secrets.CONDA_PASSWORD }}@cxc.cfa.harvard.edu/mta/ASPECT/ska3-conda/shiny,conda-forge
     - name: Remove defaults channel
       run: conda config --remove channels defaults
