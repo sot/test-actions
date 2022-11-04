@@ -1,0 +1,25 @@
+name: Setup Miniconda
+
+on:
+  repository_dispatch:
+    types:
+      - setup-miniconda
+
+jobs:
+  setup:
+    runs-on: "macos-latest"
+    name: Setup
+    defaults:
+      run:
+        shell: bash -l {0}
+    steps:
+    - uses: conda-incubator/setup-miniconda@v2
+      with:
+        miniconda-version: "py38_4.8.3"
+        python-version: "3.8"
+        channels: conda-forge
+    # - name: Remove defaults channel
+    #   run: conda config --remove channels defaults
+    - name: Show channels
+      run: conda config --show channels
+
