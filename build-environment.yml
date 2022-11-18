@@ -1,0 +1,11 @@
+channels:
+  - conda-forge
+dependencies:
+  - python=3.10
+  - setuptools_scm
+  - gitpython
+  - conda-build
+  - jinja2
+  - pyyaml
+  - numpy
+  - packaging
