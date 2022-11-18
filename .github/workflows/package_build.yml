@@ -37,7 +37,6 @@ on:
 
 jobs:
   build:
-    if: ${{ !inputs.noarch }}
     runs-on: ${{ matrix.os }}
     name: Build on ${{ matrix.os }}
     strategy:
@@ -48,20 +47,28 @@ jobs:
       run:
         shell: bash -l {0}
     steps:
+    - name: Fetch
+      uses: actions/checkout@v2
     - name: Fetch Skare3-tools
       uses: actions/checkout@v2
       with:
         repository: sot/skare3_tools
         ref: master
         path: skare3_tools
-    - uses: conda-incubator/setup-miniconda@v2
+    - uses: sot/setup-miniconda@v2
       with:
+        miniconda-version: py39_4.12.0
+        # python-version: "3.10"
+        environment-file: build-environment.yml
         channels: https://ska:${{ secrets.CONDA_PASSWORD }}@cxc.cfa.harvard.edu/mta/ASPECT/ska3-conda/shiny,conda-forge
     - name: Build Dependencies
       run: conda install setuptools_scm gitpython conda-build jinja2 pyyaml python=${{ inputs.python_version }} numpy packaging
     - name: Build Package
       run: |
-        python skare3_tools/actions/build/files/build.py --arch-specific ${{ inputs.repository }} --tag ${{ inputs.tag }}
+        arch_arg=`if [[ ${{ matrix.os }} != 'ubuntu-latest' ]]; then echo; else echo '--arch-specific'; fi`
+        echo arch option: $arch_arg
+        echo python skare3_tools/actions/build/files/build.py ${{steps.arch-option.outputs.arch }} ${{ inputs.repository }} --tag ${{ inputs.tag }} --python ${{ inputs.python_version }}
+        python skare3_tools/actions/build/files/build.py ${{steps.arch-option.outputs.arch }} ${{ inputs.repository }} --tag ${{ inputs.tag }} --python ${{ inputs.python_version }}
       env:
         CONDA_PASSWORD: ${{ secrets.CONDA_PASSWORD }}
         GIT_USERNAME: chandra-xray
@@ -73,6 +80,7 @@ jobs:
         name: conda-package
         path: |
           builds/noarch/
+          builds/linux-64/
           builds/osx-64/
           builds/win-64/
           !builds/*/*repodata*
