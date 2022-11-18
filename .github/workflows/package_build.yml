@@ -56,8 +56,6 @@ jobs:
         path: skare3_tools
     - uses: conda-incubator/setup-miniconda@v2
       with:
-        miniconda-version: ${{ inputs.miniconda_version }}
-        python-version: ${{ inputs.python_version }}
         channels: https://ska:${{ secrets.CONDA_PASSWORD }}@cxc.cfa.harvard.edu/mta/ASPECT/ska3-conda/shiny,conda-forge
     - name: Build Dependencies
       run: conda install setuptools_scm gitpython conda-build jinja2 pyyaml python=${{ inputs.python_version }} numpy packaging
