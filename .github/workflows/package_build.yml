@@ -65,7 +65,7 @@ jobs:
       run: conda install setuptools_scm gitpython conda-build jinja2 pyyaml python=${{ inputs.python_version }} numpy packaging
     - name: Build Package
       run: |
-        arch_arg=`if [[ "${{ matrix.os }}"" == "ubuntu-latest" ]]; then echo; else echo '--arch-specific'; fi`
+        arch_arg=`if [[ "${{ matrix.os }}" == "ubuntu-latest" ]]; then echo; else echo '--arch-specific'; fi`
         echo python skare3_tools/actions/build/files/build.py $arch_arg ${{ inputs.repository }} --tag ${{ inputs.tag }} --python ${{ inputs.python_version }}
         python skare3_tools/actions/build/files/build.py $arch_arg ${{ inputs.repository }} --tag ${{ inputs.tag }} --python ${{ inputs.python_version }}
       env:
