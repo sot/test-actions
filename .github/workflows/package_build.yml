@@ -17,6 +17,16 @@ on:
         required: false
         type: boolean
         default: false
+      python_version:
+        description: Python version
+        required: false
+        type: string
+        default: 3.10
+      miniconda_version:
+        description: Miniconda version
+        required: false
+        type: string
+        default: py39_4.12.0
     secrets:
       CONDA_PASSWORD:
         required: true
@@ -26,14 +36,14 @@ on:
         required: true
 
 jobs:
-  build-other:
+  build:
     if: ${{ !inputs.noarch }}
     runs-on: ${{ matrix.os }}
     name: Build on ${{ matrix.os }}
     strategy:
       fail-fast: false
       matrix:
-        os: ["macos-latest"]
+        os: ["ubuntu-latest", "macos-latest", "windows-2019"]
     defaults:
       run:
         shell: bash -l {0}
@@ -46,15 +56,11 @@ jobs:
         path: skare3_tools
     - uses: conda-incubator/setup-miniconda@v2
       with:
-        miniconda-version: "py38_4.8.3"
-        python-version: "3.8"
+        miniconda-version: ${{ inputs.miniconda_version }}
+        python-version: ${{ inputs.python_version }}
         channels: https://ska:${{ secrets.CONDA_PASSWORD }}@cxc.cfa.harvard.edu/mta/ASPECT/ska3-conda/shiny,conda-forge
-    - name: Remove defaults channel
-      run: conda config --remove channels defaults
-    - name: Show channels
-      run: conda config --show channels
     - name: Build Dependencies
-      run: conda install setuptools_scm gitpython conda-build jinja2 pyyaml python=3.8 numpy packaging
+      run: conda install setuptools_scm gitpython conda-build jinja2 pyyaml python=${{ inputs.python_version }} numpy packaging
     - name: Build Package
       run: |
         python skare3_tools/actions/build/files/build.py --arch-specific ${{ inputs.repository }} --tag ${{ inputs.tag }}
