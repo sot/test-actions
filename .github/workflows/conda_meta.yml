@@ -16,15 +16,15 @@ jobs:
     steps:
       - name: Fetch
         uses: actions/checkout@v2
-      - name: Cache conda packages
-        uses: actions/cache@v2
-        env:
-          # Increase this value to reset cache if etc/example-environment.yml has not changed
-          CACHE_NUMBER: 0
-        with:
-          path: ~/conda_pkgs_dir
-          key:
-            ${{ runner.os }}-conda-${{ env.CACHE_NUMBER }}-${{hashFiles('build-environment.yml') }}
+      # - name: Cache conda packages
+      #   uses: actions/cache@v2
+      #   env:
+      #     # Increase this value to reset cache if etc/example-environment.yml has not changed
+      #     CACHE_NUMBER: 0
+      #   with:
+      #     path: ~/conda_pkgs_dir
+      #     key:
+      #       ${{ runner.os }}-conda-${{ env.CACHE_NUMBER }}-${{hashFiles('build-environment.yml') }}
       - uses: sot/setup-miniconda@v2
         with:
           miniconda-version: py39_4.12.0
