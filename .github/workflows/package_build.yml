@@ -73,7 +73,7 @@ jobs:
       with:
         miniconda-version: py39_4.12.0
         environment-file: build-environment.yml
-        channels: https://ska:${{ secrets.CONDA_PASSWORD }}@cxc.cfa.harvard.edu/mta/ASPECT/ska3-conda/shiny,conda-forge
+        channels: https://ska:${{ secrets.CONDA_PASSWORD }}@cxc.cfa.harvard.edu/mta/ASPECT/ska3-conda/prime,conda-forge
     - name: Build Package
       run: |
         arch_arg=`if [[ "${{ matrix.os }}" == "ubuntu-latest" ]]; then echo; else echo '--arch-specific'; fi`
