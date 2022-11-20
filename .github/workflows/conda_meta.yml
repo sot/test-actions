@@ -128,7 +128,6 @@ jobs:
             -o patch_instructions/noarch
           cp -fr json/patch_instructions-*/linux-64 patch_instructions/
           cp -fr json/patch_instructions-*/osx-64 patch_instructions/
-          cp -fr json/patch_instructions-*/win-64 patch_instructions/
           ls -R patch_instructions
       - name: Save patches
         uses: actions/upload-artifact@v2.2.4
