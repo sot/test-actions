@@ -98,7 +98,6 @@ jobs:
             --out pkg_defs/ska3-core/meta.yaml \
             --env linux=json/ska3-flight-ubuntu.json \
             --env osx=json/ska3-flight-macos.json \
-            --env win=json/ska3-flight-windows.json \
             --not-in skare3/pkg_defs/ska3-flight-latest/meta.yaml \
             --exclude ska3-flight
       - name: ska3-flight
@@ -107,7 +106,6 @@ jobs:
             --out pkg_defs/ska3-flight/meta.yaml \
             --env linux=json/ska3-flight-ubuntu.json \
             --env osx=json/ska3-flight-macos.json \
-            --env win=json/ska3-flight-windows.json \
             --in skare3/pkg_defs/ska3-flight-latest/meta.yaml \
             --include ska3-core \
             --build "noarch: generic"
@@ -152,7 +150,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: ["ubuntu", "macos", "windows"]
+        os: ["ubuntu", "macos"]
     steps:
       - name: Get yaml files
         uses: actions/download-artifact@v2
