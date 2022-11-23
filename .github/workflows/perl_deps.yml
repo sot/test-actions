@@ -1,0 +1,32 @@
+name: Build Ska Package
+
+on:
+  repository_dispatch:
+    types:
+      - perl-packages
+
+jobs:
+  build:
+    runs-on: macos-latest
+    defaults:
+      run:
+        shell: bash -l {0}
+    steps:
+      - name: Checkout Skare3-static
+        uses: actions/checkout@v2
+        with:
+          repository: sot/skare3-static
+          ref: master
+          path: skare3-static
+      - uses: sot/setup-miniconda@v2
+        with:
+          miniconda-version: py39_4.12.0
+          channels: https://ska:${{ secrets.CONDA_PASSWORD }}@cxc.cfa.harvard.edu/mta/ASPECT/ska3-conda/prime,conda-forge
+      # deal with setup-miniconda bug that adds defaults channel in ~/.condarc
+      - name: Remove defaults channel
+        run: conda config --remove channels defaults
+      - name: setup environment
+        run: conda install python=3.10 conda-build jinja2 pyyaml
+      - name: build
+        run: python build.py
+        workdir: skare3-static
