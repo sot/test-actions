@@ -29,4 +29,4 @@ jobs:
         run: conda install python=3.10 conda-build jinja2 pyyaml
       - name: build
         run: python build.py
-        workdir: skare3-static
+        working-directory: skare3-static
