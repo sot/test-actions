@@ -48,6 +48,7 @@ jobs:
         run: |
           mamba install -y ska3-perl-latest
           conda list --json > ska3-perl-${ARCH}.json
+      - run: conda list
       - name: patches
         run: ./skare3/patch_instructions.py get -o patch_instructions-${ARCH}
       - name: Save

@@ -11,3 +11,5 @@ dependencies:
   - pyyaml
   - numpy
   - packaging
+  - ska_helpers
+  - testr
