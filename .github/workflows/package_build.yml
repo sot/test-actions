@@ -74,11 +74,15 @@ jobs:
         path: ~/conda_pkgs_dir
         key:
           ${{ runner.os }}-conda-${{ env.CACHE_NUMBER }}-${{hashFiles('build-environment.yml') }}
+    - name: Env Contents
+      run: cat build-environment.yml
     - uses: sot/setup-miniconda@v2
       with:
         miniconda-version: py39_4.12.0
         environment-file: build-environment.yml
         channels: https://ska:${{ secrets.CONDA_PASSWORD }}@cxc.cfa.harvard.edu/mta/ASPECT/ska3-conda/prime,conda-forge
+    - name: Env List
+      run: conda list
     - name: Build Package
       run: |
         arch_arg=`if [[ "${{ matrix.os }}" == "ubuntu-latest" ]]; then echo; else echo '--arch-specific'; fi`
