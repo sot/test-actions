@@ -11,4 +11,4 @@ jobs:
     with:
       repository: sot/eng_archive
     secrets:
-      CHANDRA_XRAY_TOKEN: ${{ secrets.CHANDRA_XRAY_TOKEN }}
+      token: ${{ secrets.SKARE3_CI_API_TOKEN }}
