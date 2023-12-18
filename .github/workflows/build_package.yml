@@ -13,6 +13,7 @@ jobs:
       tag: ${{ github.event.client_payload.tag }}
       noarch: ${{ !github.event.client_payload.arch }}
       python_version: "3.11"
+      numpy_version: "1.26.2"
     secrets:
       CONDA_PASSWORD: ${{ secrets.CONDA_PASSWORD }}
       CHANDRA_XRAY_TOKEN: ${{ secrets.CHANDRA_XRAY_TOKEN }}
