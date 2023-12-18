@@ -7,20 +7,13 @@ on:
 
 jobs:
   build:
-    uses: sot/test-actions/.github/workflows/package_build.yml@master
+    uses: sot/skare3/.github/workflows/package_build.yml@2024.0
     with:
       repository: ${{ github.event.client_payload.package }}
       tag: ${{ github.event.client_payload.tag }}
       noarch: ${{ !github.event.client_payload.arch }}
-      skare3_branch: ${{ github.event.client_payload.skare3_branch }}
+      python_version: "3.11"
     secrets:
       CONDA_PASSWORD: ${{ secrets.CONDA_PASSWORD }}
       CHANDRA_XRAY_TOKEN: ${{ secrets.CHANDRA_XRAY_TOKEN }}
       token: ${{ secrets.GITHUB_TOKEN }}
-
-  upload:
-    if: ${{ github.event.client_payload.upload }}
-    needs: [build]
-    uses: sot/skare3/.github/workflows/package_upload.yml@master
-    with:
-      channel: prime
