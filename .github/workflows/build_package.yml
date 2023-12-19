@@ -14,7 +14,7 @@ jobs:
       noarch: ${{ !github.event.client_payload.arch }}
       python_version: "3.11"
       numpy_version: "1.26.2"
-      skare3_branch: "2024.0"
+      skare3_branch: "2024.0-branch"
     secrets:
       CONDA_PASSWORD: ${{ secrets.CONDA_PASSWORD }}
       CHANDRA_XRAY_TOKEN: ${{ secrets.CHANDRA_XRAY_TOKEN }}
