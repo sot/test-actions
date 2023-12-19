@@ -24,6 +24,6 @@ jobs:
   upload:
     if: ${{ (github.event.client_payload.upload == 'true') || (github.event.client_payload.upload == 'True') }}
     needs: [build]
-    uses: sot/skare3/.github/workflows/package_upload.yml@master
+    uses: sot/skare3/.github/workflows/package_upload.yml@2024_0-branch
     with:
       channel: speedy
