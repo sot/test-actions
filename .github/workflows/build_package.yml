@@ -15,7 +15,15 @@ jobs:
       python_version: "3.11"
       numpy_version: "1.26.2"
       skare3_branch: "2024_0-branch"
+      channel: speedy
     secrets:
       CONDA_PASSWORD: ${{ secrets.CONDA_PASSWORD }}
       CHANDRA_XRAY_TOKEN: ${{ secrets.CHANDRA_XRAY_TOKEN }}
       token: ${{ secrets.GITHUB_TOKEN }}
+
+  upload:
+    if: ${{ (github.event.client_payload.upload == 'true') || (github.event.client_payload.upload == 'True') }}
+    needs: [build]
+    uses: sot/skare3/.github/workflows/package_upload.yml@master
+    with:
+      channel: speedy
