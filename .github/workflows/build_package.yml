@@ -7,7 +7,7 @@ on:
 
 jobs:
   build:
-    uses: sot/skare3/.github/workflows/package_build.yml@master
+    uses: sot/skare3/.github/workflows/package_build.yml@2024_0-branch
     with:
       repository: ${{ github.event.client_payload.package }}
       tag: ${{ github.event.client_payload.tag }}
