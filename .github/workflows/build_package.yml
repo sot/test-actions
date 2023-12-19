@@ -11,7 +11,7 @@ jobs:
     with:
       repository: ${{ github.event.client_payload.package }}
       tag: ${{ github.event.client_payload.tag }}
-      noarch: ${{ !github.event.client_payload.arch }}
+      noarch: ${{ github.event.client_payload.arch == 'true' }}
       python_version: "3.11"
       numpy_version: "1.26.2"
       skare3_branch: "2024_0-branch"
