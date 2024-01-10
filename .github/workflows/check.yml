@@ -9,4 +9,5 @@ jobs:
     steps:
       - run: |
           echo "Checking"
+          idonotexist
 
