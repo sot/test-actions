@@ -7,7 +7,10 @@ jobs:
     runs-on: head
     name: Checking
     steps:
+      - name: Fetch
+        uses: actions/checkout@v2
       - run: |
           echo "Checking"
-          idonotexist
-
+          source /export/jgonzale/github-workflows/miniconda3/envs/ska3-masters/bin/ska_envs.sh
+          pwd
+          ls
