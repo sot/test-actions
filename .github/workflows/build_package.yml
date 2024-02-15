@@ -14,9 +14,9 @@ jobs:
       noarch: ${{ (github.event.client_payload.arch != 'true') && (github.event.client_payload.arch != 'True')}}
       python_version: "3.11"
       numpy_version: "1.26.2"
-      skare3_branch: "master"
+      skare3_branch: speedy-build
       # the following channel in ska3-conda is used to create the build environment
-      channel: "master"
+      channel: speedy
     secrets:
       CONDA_PASSWORD: ${{ secrets.CONDA_PASSWORD }}
       CHANDRA_XRAY_TOKEN: ${{ secrets.CHANDRA_XRAY_TOKEN }}
