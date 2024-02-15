@@ -1,16 +1,15 @@
-name: Check
+name: Tests
 
 on: [push]
 
 jobs:
   check:
     runs-on: head
-    name: Checking
+    name: Tests
     steps:
       - name: Fetch
         uses: actions/checkout@v2
-      - run: |
-          echo "Checking"
+      - name: Pytest
+        run: |
           source /export/jgonzale/github-workflows/miniconda3/envs/ska3-masters/bin/ska_envs.sh
-          pwd
-          ls
+          pytest Quaternion
