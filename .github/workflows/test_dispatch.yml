@@ -43,7 +43,7 @@ jobs:
         if [ "${{ github.event.client_payload.upload }}" == "" ]; then echo upload is not given; fi
         if [ "${{ github.event.client_payload.upload }}" == "false" ]; then echo upload is false; fi
         if [ "${{ github.event.client_payload.upload }}" == "False" ]; then echo upload is False; fi
-        if [[ ! -z $OK ]]; then echo "Missing parameters: $MISSING"; exit 1; fi
+        if [[ ! -z $MISSING ]]; then echo "Missing parameters: $MISSING"; exit 1; fi
     - if: ${{ github.event.client_payload.upload }}
       run: echo "Uploading"
     - run: echo "python version $PYTHON_VERSION"
