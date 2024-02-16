@@ -70,10 +70,20 @@ jobs:
             echo "$1=$2" >> $GITHUB_OUTPUT
           fi
         }
+        set_boolean_default() {
+          if [[ -z "$2" ]]; then
+            echo "Setting default value for $1"
+            echo "$1=$3" >> $GITHUB_OUTPUT
+          elif [[ "$2" == "true" || "$2" == "True" ]]; then
+            echo "$1=true" >> $GITHUB_OUTPUT
+          else
+            echo "$1=false" >> $GITHUB_OUTPUT
+          fi
+        }
         require package ${{ github.event.client_payload.package }}
         require tag ${{ github.event.client_payload.tag }}
-        set_default arch "${{ github.event.client_payload.arch }}" false
-        set_default upload "${{ github.event.client_payload.upload }}" false
+        set_boolean_default arch "${{ github.event.client_payload.arch }}" false
+        set_boolean_default upload "${{ github.event.client_payload.upload }}" false
         set_default python_version "${{ github.event.client_payload.python_version }}" 3.11
         set_default numpy_version "${{ github.event.client_payload.numpy_version }}" 1.26.2
         set_default channel_in "${{ github.event.client_payload.channel_in }}" "flight"
@@ -114,7 +124,7 @@ jobs:
       token: ${{ secrets.GITHUB_TOKEN }}
 
   upload:
-    if: ${{ github.event.client_payload.upload }}
+    if: ${{ github.event.client_payload.upload == 'true' }}
     needs: [build, arguments]  # this job needs the arguments job because it uses the outputs
     uses: sot/skare3/.github/workflows/package_upload.yml@speedy-build
     with:
