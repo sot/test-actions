@@ -10,7 +10,8 @@ name: Build Ska Package
 #   - upload: whether to upload the package to the ska3-conda channel (default is false)
 #   - python_version: the python version to use for the build (default is 3.11)
 #   - numpy_version: the numpy version to use for the build (default is 1.26.2)
-#   - channel_in: the channel to use for the build environment (default is flight)
+#   - channel_in: the channel to use for the build environment (default is flight).
+#     This channel gets passed to package_build workflow, which also adds conda-forge
 #   - channel_out: the channel to upload the package to (default is test)
 #   - skare3_branch: the branch of skare3 to use for the build (default is master)
 #
@@ -101,7 +102,7 @@ jobs:
     with:
       repository: ${{ github.event.client_payload.package }}
       tag: ${{ github.event.client_payload.tag }}
-      noarch: ${{ (github.event.client_payload.arch != 'true') && (github.event.client_payload.arch != 'True')}}
+      noarch: ${{ !github.event.client_payload.arch && (github.event.client_payload.arch != 'true') && (github.event.client_payload.arch != 'True')}}
       python_version: ${{ needs.arguments.outputs.python_version }}
       numpy_version: ${{ needs.arguments.outputs.numpy_version }}
       skare3_branch: ${{ needs.arguments.outputs.skare3_branch }}
