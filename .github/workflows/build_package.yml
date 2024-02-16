@@ -89,6 +89,7 @@ jobs:
         echo "- Tag: ${{ steps.arguments.outputs.tag }}" >> $GITHUB_STEP_SUMMARY
         echo "- Arch: ${{ steps.arguments.outputs.arch }}" >> $GITHUB_STEP_SUMMARY
         echo "- Upload: ${{ steps.arguments.outputs.upload }}" >> $GITHUB_STEP_SUMMARY
+        echo "- Skare3 branch: ${{ steps.arguments.outputs.skare3_branch }}" >> $GITHUB_STEP_SUMMARY
         echo "- Python version: ${{ steps.arguments.outputs.python_version }}" >> $GITHUB_STEP_SUMMARY
         echo "- Numpy version: ${{ steps.arguments.outputs.numpy_version }}" >> $GITHUB_STEP_SUMMARY
         echo "- Input channel: ${{ steps.arguments.outputs.channel_in }}" >> $GITHUB_STEP_SUMMARY
