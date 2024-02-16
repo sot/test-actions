@@ -16,9 +16,10 @@ jobs:
         echo "Upload: ${{ github.event.client_payload.upload }}"
         echo "Python version: ${{ github.event.client_payload.python_version }}"
         echo "Numpy version: ${{ github.event.client_payload.numpy_version }}"
-        echo "Input channel: ${{ github.event.client_payload.channel }}"
+        echo "Input channel: ${{ github.event.client_payload.channel_in }}"
       shell: bash
     - run: |
+        OK=1
         set_default() {
           if [ -z "$2" ]; then
             echo "Setting default value for $1"
@@ -27,10 +28,20 @@ jobs:
             echo "$1=$2" >> $GITHUB_ENV
           fi
         }
-        set_default "PYTHON_VERSION" "${{ github.event.client_payload.python_version }}" "3.11"
+        require () {
+          if [ -z "$2" ]; then
+            echo "Required value $1 not given"
+            OK=0
+          fi
+        }
+        set_default PYTHON_VERSION "${{ github.event.client_payload.python_version }}" 3.11
+        set_default NUMPY_VERSION "${{ github.event.client_payload.numpy_version }}" 1.26.2
+        set_default CHANNEL "${{ github.event.client_payload.channe_in }}" "flight"
+        set_default CHANNEL_OUT "${{ github.event.client_payload.channel_out }}" "test"
         if [ "${{ github.event.client_payload.upload }}" == "" ]; then echo upload is not given; fi
         if [ "${{ github.event.client_payload.upload }}" == "false" ]; then echo upload is false; fi
         if [ "${{ github.event.client_payload.upload }}" == "False" ]; then echo upload is False; fi
+        if [ !$OK ]; then echo "Error in arguments"; exit 1; fi
     - if: ${{ github.event.client_payload.upload }}
       run: echo "Uploading"
     - run: echo "python version $PYTHON_VERSION"
