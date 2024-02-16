@@ -30,6 +30,7 @@ jobs:
         }
         require package ${{ github.event.client_payload.package }}
         require tag ${{ github.event.client_payload.tag }}
+        set_default arch "${{ github.event.client_payload.arch }}" false
         set_default upload "${{ github.event.client_payload.upload }}" false
         set_default python_version "${{ github.event.client_payload.python_version }}" 3.11
         set_default numpy_version "${{ github.event.client_payload.numpy_version }}" 1.26.2
