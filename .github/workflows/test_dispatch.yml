@@ -23,7 +23,8 @@ jobs:
         echo "Arch: '${{ github.event.client_payload.arch }}'"
         echo "not arch: '${{ !github.event.client_payload.arch }}'"
         echo "not Arch (2): ${{ (github.event.client_payload.arch != 'true') && (github.event.client_payload.arch != 'True')}}"
-        echo "not Arch (2): ${{ !github.event.client_payload.arch && (github.event.client_payload.arch != 'true') && (github.event.client_payload.arch != 'True')}}"
+        echo "not Arch (3): ${{ (github.event.client_payload.arch != 'true') && (github.event.client_payload.arch != 'True')}}"
+        echo "not Arch (4): ${{ fromJSON(github.event.client_payload.arch) }}"
     - name: If arch
       if: ${{ github.event.client_payload.arch }}
       run: echo "arch"
