@@ -19,11 +19,13 @@ jobs:
         echo "Input channel: ${{ github.event.client_payload.channel }}"
       shell: bash
     - run: |
-        if [ "${{ github.event.client_payload.python_version }}" == "" ]; then echo python version not provided; fi
+        python=${{ github.event.client_payload.python_version }}
+        if [ "$python" == "" ]; then echo "PYTHON_VERSION=${python}" >> $GITHUB_STATE else echo "PYTHON_VERSION=3.11" fi
         if [ "${{ github.event.client_payload.upload }}" == "" ]; then echo upload is not given; fi
         if [ "${{ github.event.client_payload.upload }}" == "false" ]; then echo upload is false; fi
         if [ "${{ github.event.client_payload.upload }}" == "False" ]; then echo upload is False; fi
     - if: ${{ github.event.client_payload.upload }}
       run: echo "Uploading"
-
+    - run: echo python version: $PYTHON_VERSION
+  
 
