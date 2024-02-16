@@ -20,7 +20,7 @@ jobs:
       shell: bash
     - run: |
         python=${{ github.event.client_payload.python_version }}
-        if [ "$python" == "" ]; then echo "PYTHON_VERSION=${python}" >> $GITHUB_ENV; else echo "PYTHON_VERSION=3.11"; fi
+        if [ "$python" == "" ]; then echo "PYTHON_VERSION=3.11" >> $GITHUB_ENV; else echo "PYTHON_VERSION=${python}"; fi
         if [ "${{ github.event.client_payload.upload }}" == "" ]; then echo upload is not given; fi
         if [ "${{ github.event.client_payload.upload }}" == "false" ]; then echo upload is false; fi
         if [ "${{ github.event.client_payload.upload }}" == "False" ]; then echo upload is False; fi
