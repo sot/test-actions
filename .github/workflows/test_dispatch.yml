@@ -21,8 +21,14 @@ jobs:
     - name: Arch
       run: |
         echo "Arch: '${{ github.event.client_payload.arch }}'"
-        echo "not arch: ${{ !github.event.client_payload.arch }}"
+        echo "not arch: '${{ !github.event.client_payload.arch }}'"
         echo "Arch (2): ${{ (github.event.client_payload.arch != 'true') && (github.event.client_payload.arch != 'True')}}"
+    - name: If arch
+      if: ${{ github.event.client_payload.arch }}
+      run: echo "arch"
+    - name: If not arch
+      if: ${{ !github.event.client_payload.arch }}
+      run: echo "not arch"
     - name: Check arguments
       id: arguments
       run: |
