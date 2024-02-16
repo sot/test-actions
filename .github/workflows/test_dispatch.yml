@@ -18,20 +18,6 @@ jobs:
       channel_in: ${{ steps.arguments.outputs.channel_in }}
       channel_out: ${{ steps.arguments.outputs.channel_out }}
     steps:
-    - name: Arch
-      run: |
-        echo "Arch: '${{ github.event.client_payload.arch }}'"
-        echo "not arch: '${{ !github.event.client_payload.arch }}'"
-        echo "not Arch (2): ${{ (github.event.client_payload.arch != 'true') && (github.event.client_payload.arch != 'True')}}"
-        echo "not Arch (3): ${{ !github.event.client_payload.arch && (github.event.client_payload.arch != 'true') && (github.event.client_payload.arch != 'True')}}"
-        echo "not Arch (4): ${{ fromJSON(github.event.client_payload.arch) }}"
-        echo "not Arch (5): ${{ !github.event.client_payload.arch && fromJSON(github.event.client_payload.arch) }}"
-    - name: If arch
-      if: ${{ github.event.client_payload.arch }}
-      run: echo "arch"
-    - name: If not arch
-      if: ${{ !github.event.client_payload.arch }}
-      run: echo "not arch"
     - name: Check arguments
       id: arguments
       run: |
@@ -52,10 +38,20 @@ jobs:
             echo "$1=$2" >> $GITHUB_OUTPUT
           fi
         }
+        set_boolean_default() {
+          if [[ -z "$2" ]]; then
+            echo "Setting default value for $1"
+            echo "$1=$3" >> $GITHUB_OUTPUT
+          elif [[ "$2" == "true" || "$2" == "True" ]]; then
+            echo "$1='true'" >> $GITHUB_OUTPUT
+          else
+            echo "$1='false'" >> $GITHUB_OUTPUT
+          fi
+        }
         require package ${{ github.event.client_payload.package }}
         require tag ${{ github.event.client_payload.tag }}
-        set_default arch "${{ github.event.client_payload.arch }}" false
-        set_default upload "${{ github.event.client_payload.upload }}" false
+        set_boolean_default arch "${{ github.event.client_payload.arch }}" false
+        set_boolean_default upload "${{ github.event.client_payload.upload }}" false
         set_default python_version "${{ github.event.client_payload.python_version }}" 3.11
         set_default numpy_version "${{ github.event.client_payload.numpy_version }}" 1.26.2
         set_default channel_in "${{ github.event.client_payload.channe_in }}" "flight"
@@ -75,10 +71,24 @@ jobs:
         echo "- Numpy version: ${{ steps.arguments.outputs.numpy_version }}" >> $GITHUB_STEP_SUMMARY
         echo "- Input channel: ${{ steps.arguments.outputs.channel_in }}" >> $GITHUB_STEP_SUMMARY
         echo "- Output channel: ${{ steps.arguments.outputs.channel_out }}" >> $GITHUB_STEP_SUMMARY
+    - name: Arch
+      run: |
+        echo "Arch: '${{ github.event.client_payload.arch }}'"
+        echo "not arch: '${{ !github.event.client_payload.arch }}'"
+        echo "not Arch (2): ${{ (github.event.client_payload.arch != 'true') && (github.event.client_payload.arch != 'True')}}"
+        echo "not Arch (3): ${{ !github.event.client_payload.arch && (github.event.client_payload.arch != 'true') && (github.event.client_payload.arch != 'True')}}"
+        echo "not Arch (4): ${{ fromJSON(github.event.client_payload.arch) }}"
+        echo "not Arch (5): ${{ !github.event.client_payload.arch && fromJSON(github.event.client_payload.arch) }}"
   build:
     runs-on: ubuntu-latest
     needs: arguments
     steps:
+    - name: If arch
+      if: ${{ needs.arguments.outputs.arch == 'true' }}
+      run: echo "arch"
+    - name: If not arch
+      if: ${{ needs.arguments.outputs.arch == 'false' }}
+      run: echo "not arch"
     - name: List arguments
       run: |
         echo "Package: ${{ needs.arguments.outputs.package }}"
