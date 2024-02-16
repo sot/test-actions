@@ -21,7 +21,7 @@ jobs:
     - run: |
         MISSING=""
         set_default() {
-          if [ -z "$2" ]; then
+          if [[ -z "$2" ]]; then
             echo "Setting default value for $1"
             echo "$1=$3" >> $GITHUB_ENV
           else
@@ -29,7 +29,7 @@ jobs:
           fi
         }
         require () {
-          if [ -z "$2" ]; then
+          if [[ -z "$2" ]]; then
             echo "Required value $1 not given"
             MISSING="$MISSING $1"
           fi
@@ -43,7 +43,7 @@ jobs:
         if [ "${{ github.event.client_payload.upload }}" == "" ]; then echo upload is not given; fi
         if [ "${{ github.event.client_payload.upload }}" == "false" ]; then echo upload is false; fi
         if [ "${{ github.event.client_payload.upload }}" == "False" ]; then echo upload is False; fi
-        if [[ $OK -eq 0 ]]; then echo "Error in arguments"; exit 1; fi
+        if [[ ! -z $OK ]]; then echo "Missing parameters: $MISSING"; exit 1; fi
     - if: ${{ github.event.client_payload.upload }}
       run: echo "Uploading"
     - run: echo "python version $PYTHON_VERSION"
