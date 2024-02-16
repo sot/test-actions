@@ -6,8 +6,17 @@ on:
       - test-dispatch
 
 jobs:
-  check:
+  arguments:
     runs-on: ubuntu-latest
+    outputs:
+      package: ${{ steps.arguments.outputs.package }}
+      tag: ${{ steps.arguments.outputs.tag }}
+      arch: ${{ steps.arguments.outputs.arch }}
+      upload: ${{ steps.arguments.outputs.upload }}
+      python_version: ${{ steps.arguments.outputs.python_version }}
+      numpy_version: ${{ steps.arguments.outputs.numpy_version }}
+      channel_in: ${{ steps.arguments.outputs.channel_in }}
+      channel_out: ${{ steps.arguments.outputs.channel_out }}
     steps:
     - name: Check arguments
       id: arguments
@@ -41,25 +50,20 @@ jobs:
         if [ "${{ github.event.client_payload.upload }}" == "false" ]; then echo upload is false; fi
         if [ "${{ github.event.client_payload.upload }}" == "False" ]; then echo upload is False; fi
         if [[ ! -z $MISSING ]]; then echo "::warning:: Missing parameters: $MISSING"; exit 1; fi
+  build:
+    runs-on: ubuntu-latest
+    needs: arguments
+    steps:
     - name: List arguments
       run: |
-        echo "Package: ${{ steps.arguments.outputs.package }}"
-        echo "Tag: ${{ steps.arguments.outputs.tag }}"
-        echo "Arch: ${{ steps.arguments.outputs.arch }}"
-        echo "Upload: ${{ steps.arguments.outputs.upload }}"
-        echo "Python version: ${{ steps.arguments.outputs.python_version }}"
-        echo "Numpy version: ${{ steps.arguments.outputs.numpy_version }}"
-        echo "Input channel: ${{ steps.arguments.outputs.channel_in }}"
-        echo "Output channel: ${{ steps.arguments.outputs.channel_out }}"
-        echo "## Payload Arguments" >> $GITHUB_STEP_SUMMARY
-        echo "- Package: ${{ steps.arguments.outputs.package }}" >> $GITHUB_STEP_SUMMARY
-        echo "- Tag: ${{ steps.arguments.outputs.tag }}" >> $GITHUB_STEP_SUMMARY
-        echo "- Arch: ${{ steps.arguments.outputs.arch }}" >> $GITHUB_STEP_SUMMARY
-        echo "- Upload: ${{ steps.arguments.outputs.upload }}" >> $GITHUB_STEP_SUMMARY
-        echo "- Python version: ${{ steps.arguments.outputs.python_version }}" >> $GITHUB_STEP_SUMMARY
-        echo "- Numpy version: ${{ steps.arguments.outputs.numpy_version }}" >> $GITHUB_STEP_SUMMARY
-        echo "- Input channel: ${{ steps.arguments.outputs.channel_in }}" >> $GITHUB_STEP_SUMMARY
-        echo "- Output channel: ${{ steps.arguments.outputs.channel_out }}" >> $GITHUB_STEP_SUMMARY
+        echo "Package: ${{ needs.arguments.outputs.package }}"
+        echo "Tag: ${{ needs.arguments.outputs.tag }}"
+        echo "Arch: ${{ needs.arguments.outputs.arch }}"
+        echo "Upload: ${{ needs.arguments.outputs.upload }}"
+        echo "Python version: ${{ needs.arguments.outputs.python_version }}"
+        echo "Numpy version: ${{ needs.arguments.outputs.numpy_version }}"
+        echo "Input channel: ${{ needs.arguments.outputs.channel_in }}"
+        echo "Output channel: ${{ needs.arguments.outputs.channel_out }}"
     - name: Upload
       if: ${{ github.event.client_payload.upload }}
       run: echo "Uploading"
