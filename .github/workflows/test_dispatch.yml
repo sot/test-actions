@@ -9,7 +9,8 @@ jobs:
   check:
     runs-on: ubuntu-latest
     steps:
-    - id: arguments
+    - name: Check arguments
+      id: arguments
       run: |
         MISSING=""
         set_default() {
@@ -40,7 +41,8 @@ jobs:
         if [ "${{ github.event.client_payload.upload }}" == "false" ]; then echo upload is false; fi
         if [ "${{ github.event.client_payload.upload }}" == "False" ]; then echo upload is False; fi
         if [[ ! -z $MISSING ]]; then echo "::warning:: Missing parameters: $MISSING"; exit 1; fi
-    - run: |
+    - name: List arguments
+      run: |
         echo "Package: ${{ steps.arguments.outputs.package }}"
         echo "Tag: ${{ steps.arguments.outputs.tag }}"
         echo "Arch: ${{ steps.arguments.outputs.arch }}"
@@ -49,8 +51,6 @@ jobs:
         echo "Numpy version: ${{ steps.arguments.outputs.numpy_version }}"
         echo "Input channel: ${{ steps.arguments.outputs.channel_in }}"
         echo "Output channel: ${{ steps.arguments.outputs.channel_out }}"
-    - if: ${{ github.event.client_payload.upload }}
+    - name: Upload
+      if: ${{ github.event.client_payload.upload }}
       run: echo "Uploading"
-    - run: echo "python version $PYTHON_VERSION"
-  
-
