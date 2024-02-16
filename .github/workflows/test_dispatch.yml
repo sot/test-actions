@@ -1,0 +1,21 @@
+name: Build Ska Package
+
+on:
+  repository_dispatch:
+    types:
+      - test-dispatch
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+    - run: |
+        echo "Package: ${{ github.event.client_payload.package }}"
+        echo "Tag: ${{ github.event.client_payload.tag }}"
+        echo "Arch: ${{ github.event.client_payload.arch }}"
+        echo "Upload: ${{ github.event.client_payload.upload }}"
+        echo "Python version: ${{ github.event.client_payload.python_version }}"
+        echo "Numpy version: ${{ github.event.client_payload.numpy_version }}"
+        echo "Input channel: ${{ github.event.client_payload.channel }}"
+      shell: bash
+
