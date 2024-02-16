@@ -9,15 +9,6 @@ jobs:
   check:
     runs-on: ubuntu-latest
     steps:
-    - run: |
-        echo "Package: ${{ github.event.client_payload.package }}"
-        echo "Tag: ${{ github.event.client_payload.tag }}"
-        echo "Arch: ${{ github.event.client_payload.arch }}"
-        echo "Upload: ${{ github.event.client_payload.upload }}"
-        echo "Python version: ${{ github.event.client_payload.python_version }}"
-        echo "Numpy version: ${{ github.event.client_payload.numpy_version }}"
-        echo "Input channel: ${{ github.event.client_payload.channel_in }}"
-      shell: bash
     - id: arguments
       run: |
         MISSING=""
@@ -33,6 +24,8 @@ jobs:
           if [[ -z "$2" ]]; then
             echo "Required value $1 not given"
             MISSING="$MISSING $1"
+          else
+            echo "$1=$2" >> $GITHUB_OUTPUT
           fi
         }
         require package ${{ github.event.client_payload.package }}
