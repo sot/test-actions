@@ -51,15 +51,17 @@ jobs:
         echo "Numpy version: ${{ steps.arguments.outputs.numpy_version }}"
         echo "Input channel: ${{ steps.arguments.outputs.channel_in }}"
         echo "Output channel: ${{ steps.arguments.outputs.channel_out }}"
-        echo "## Arguments" >> $GITHUB_STEP_SUMMARY
-        echo "- Package: ${{ steps.arguments.outputs.package }}" >> $GITHUB_STEP_SUMMARY
-        echo "- Tag: ${{ steps.arguments.outputs.tag }}" >> $GITHUB_STEP_SUMMARY
-        echo "- Arch: ${{ steps.arguments.outputs.arch }}" >> $GITHUB_STEP_SUMMARY
-        echo "- Upload: ${{ steps.arguments.outputs.upload }}" >> $GITHUB_STEP_SUMMARY
-        echo "- Python version: ${{ steps.arguments.outputs.python_version }}" >> $GITHUB_STEP_SUMMARY
-        echo "- Numpy version: ${{ steps.arguments.outputs.numpy_version }}" >> $GITHUB_STEP_SUMMARY
-        echo "- Input channel: ${{ steps.arguments.outputs.channel_in }}" >> $GITHUB_STEP_SUMMARY
-        echo "- Output channel: ${{ steps.arguments.outputs.channel_out }}" >> $GITHUB_STEP_SUMMARY
+        echo "## Payload Arguments
+        echo "
+        - Package: ${{ steps.arguments.outputs.package }}
+        - Tag: ${{ steps.arguments.outputs.tag }}
+        - Arch: ${{ steps.arguments.outputs.arch }}
+        - Upload: ${{ steps.arguments.outputs.upload }}
+        - Python version: ${{ steps.arguments.outputs.python_version }}
+        - Numpy version: ${{ steps.arguments.outputs.numpy_version }}
+        - Input channel: ${{ steps.arguments.outputs.channel_in }}
+        - Output channel: ${{ steps.arguments.outputs.channel_out }}
+        " >> $GITHUB_STEP_SUMMARY
     - name: Upload
       if: ${{ github.event.client_payload.upload }}
       run: echo "Uploading"
