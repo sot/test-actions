@@ -27,7 +27,7 @@ jobs:
             echo "$1=$2" >> $GITHUB_ENV
           fi
         }
-        set_default("PYTHON_VERSION", "${{ github.event.client_payload.python_version }}", "3.11")
+        set_default "PYTHON_VERSION" "${{ github.event.client_payload.python_version }}" "3.11"
         if [ "${{ github.event.client_payload.upload }}" == "" ]; then echo upload is not given; fi
         if [ "${{ github.event.client_payload.upload }}" == "false" ]; then echo upload is false; fi
         if [ "${{ github.event.client_payload.upload }}" == "False" ]; then echo upload is False; fi
