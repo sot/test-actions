@@ -19,7 +19,7 @@ jobs:
         echo "Input channel: ${{ github.event.client_payload.channel_in }}"
       shell: bash
     - run: |
-        OK=1
+        MISSING=""
         set_default() {
           if [ -z "$2" ]; then
             echo "Setting default value for $1"
@@ -31,9 +31,11 @@ jobs:
         require () {
           if [ -z "$2" ]; then
             echo "Required value $1 not given"
-            OK=0
+            MISSING="$MISSING $1"
           fi
         }
+        require PACKAGE ${{ github.event.client_payload.package }}
+        require VERSION ${{ github.event.client_payload.version }}
         set_default PYTHON_VERSION "${{ github.event.client_payload.python_version }}" 3.11
         set_default NUMPY_VERSION "${{ github.event.client_payload.numpy_version }}" 1.26.2
         set_default CHANNEL "${{ github.event.client_payload.channe_in }}" "flight"
