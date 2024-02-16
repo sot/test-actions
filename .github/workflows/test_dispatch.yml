@@ -83,6 +83,9 @@ jobs:
     runs-on: ubuntu-latest
     needs: arguments
     steps:
+    - name: Arch
+      run: |
+        echo "Arch: '${{ needs.arguments.outputs.arch }}'"
     - name: If arch
       if: ${{ needs.arguments.outputs.arch == 'true' }}
       run: echo "arch"
