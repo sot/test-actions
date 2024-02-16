@@ -19,8 +19,15 @@ jobs:
         echo "Input channel: ${{ github.event.client_payload.channel }}"
       shell: bash
     - run: |
-        python=${{ github.event.client_payload.python_version }}
-        if [ "$python" == "" ]; then echo "PYTHON_VERSION=3.11" >> $GITHUB_ENV; else echo "PYTHON_VERSION=${python}"; fi
+        set_default() {
+          if [ -z "$2" ]; then
+            echo "Setting default value for $1"
+            echo "$1=$3" >> $GITHUB_ENV
+          else
+            echo "$1=$2" >> $GITHUB_ENV
+          fi
+        }
+        set_default("PYTHON_VERSION", ${{ github.event.client_payload.python_version }}, "3.11")
         if [ "${{ github.event.client_payload.upload }}" == "" ]; then echo upload is not given; fi
         if [ "${{ github.event.client_payload.upload }}" == "false" ]; then echo upload is false; fi
         if [ "${{ github.event.client_payload.upload }}" == "False" ]; then echo upload is False; fi
