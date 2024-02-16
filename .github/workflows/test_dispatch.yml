@@ -18,6 +18,10 @@ jobs:
       channel_in: ${{ steps.arguments.outputs.channel_in }}
       channel_out: ${{ steps.arguments.outputs.channel_out }}
     steps:
+    - name: Arch
+      run: |
+        echo "Arch: '${{ github.event.client_payload.arch }}'"
+        echo "Arch (2): ${{ (github.event.client_payload.arch != 'true') && (github.event.client_payload.arch != 'True')}}"
     - name: Check arguments
       id: arguments
       run: |
