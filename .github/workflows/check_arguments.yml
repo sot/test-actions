@@ -20,3 +20,5 @@ jobs:
             - name: occupation
               required: false
               default: "unemployed"
+            - name: comments
+              required: false
