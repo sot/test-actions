@@ -10,7 +10,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - id: foo
-        uses: skare3/build@v0.1
+        uses: skare3/build@v0.1.1
         with:
           CONDA_PASSWORD: CONDA_PASSWORD
           CHANDRA_XRAY_TOKEN: CHANDRA_XRAY_TOKEN
