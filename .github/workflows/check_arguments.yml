@@ -14,5 +14,9 @@ jobs:
         with:
           arguments: |
             ubuntu-latest
+      - name: Print Arguments
+        shell: bash
+        run: |
+          echo Arguments: ${{ github.event.client_payload }}
 
 
