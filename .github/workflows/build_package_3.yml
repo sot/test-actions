@@ -1,0 +1,15 @@
+on: [push]
+
+jobs:
+  hello_world_job:
+    runs-on: ubuntu-latest
+    name: A job to say hello
+    steps:
+      - uses: actions/checkout@v4
+      - id: foo
+        uses: skare3/build@v0.1
+        with:
+          CONDA_PASSWORD: CONDA_PASSWORD
+          CHANDRA_XRAY_TOKEN: CHANDRA_XRAY_TOKEN
+          token: GITHUB_TOKEN
+
