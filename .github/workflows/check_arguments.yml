@@ -13,10 +13,10 @@ jobs:
       - uses: skare3/check-arguments@main
         with:
           arguments: |
-            ubuntu-latest
-      - name: Print Arguments
-        shell: bash
-        run: |
-          echo Arguments: "${{ toJson(github.event.client_payload) }}"
-
-
+            - name: name
+              required: true
+            - name: age
+              required: true
+            - name: occupation
+              required: false
+              default: "unemployed"
