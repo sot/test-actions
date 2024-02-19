@@ -10,11 +10,10 @@ jobs:
     runs-on: ubuntu-latest
     name: Arguments
     outputs:
-      name: ${{ steps.arguments.outputs.name }}
-      age: ${{ steps.arguments.outputs.age }}
-      occupation: ${{ steps.arguments.outputs.occupation }}
-      comments: ${{ steps.arguments.outputs.comments }}
-      status: ${{ steps.arguments.outputs.status }}
+      name: ${{ fromJson(steps.arguments.outputs.arguments).name }}
+      age: ${{ fromJson(steps.arguments.outputs.arguments).age }}
+      occupation: ${{ fromJson(steps.arguments.outputs.arguments).occupation }}
+      comments: ${{ fromJson(steps.arguments.outputs.arguments).comments }}
     steps:
       - id: arguments
         uses: skare3/check-arguments@main
@@ -31,8 +30,10 @@ jobs:
               required: false
       - name: Print Arguments
         run: |
-          echo "Arguments: ${{ steps.arguments.outputs.arguments }}" >> $GITHUB_STEP_SUMMARY
           echo "Name: ${{ fromJson(steps.arguments.outputs.arguments).name }}" >> $GITHUB_STEP_SUMMARY
+          echo "Age: ${{ fromJson(steps.arguments.outputs.arguments).age }}" >> $GITHUB_STEP_SUMMARY
+          echo "Occupation: ${{ fromJson(steps.arguments.outputs.arguments).occupation }}" >> $GITHUB_STEP_SUMMARY
+          echo "Comments: ${{ fromJson(steps.arguments.outputs.arguments).comments }}" >> $GITHUB_STEP_SUMMARY
 
   summary:
     runs-on: ubuntu-latest
@@ -40,7 +41,6 @@ jobs:
     steps:
       - name: Print Arguments
         run: |
-          echo "Status: ${{ needs.build.outputs.status }}" >> $GITHUB_STEP_SUMMARY
           echo "Name: ${{ needs.build.outputs.name }}" >> $GITHUB_STEP_SUMMARY
           echo "Age: ${{ needs.build.outputs.age }}" >> $GITHUB_STEP_SUMMARY
           echo "Occupation: ${{ needs.build.outputs.occupation }}" >> $GITHUB_STEP_SUMMARY
