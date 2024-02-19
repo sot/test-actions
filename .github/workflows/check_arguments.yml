@@ -10,7 +10,8 @@ jobs:
     runs-on: ubuntu-latest
     name: An example parsing arguments
     steps:
-      - uses: skare3/check-arguments@main
+      - id: arguments
+        uses: skare3/check-arguments@main
         with:
           arguments: |
             - name: name
@@ -22,3 +23,10 @@ jobs:
               default: "unemployed"
             - name: comments
               required: false
+
+      - name: Print Arguments
+        run: |
+          echo "Name: ${{ steps.arguments.outputs.name }}" >> $GITHUB_STEP_SUMMARY
+          echo "Age: ${{ steps.arguments.outputs.age }}" >> $GITHUB_STEP_SUMMARY
+          echo "Occupation: ${{ steps.arguments.outputs.occupation }}" >> $GITHUB_STEP_SUMMARY
+          echo "Comments: ${{ steps.arguments.outputs.comments }}" >> $GITHUB_STEP_SUMMARY
