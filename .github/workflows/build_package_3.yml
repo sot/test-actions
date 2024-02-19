@@ -14,7 +14,8 @@ jobs:
       - id: foo
         uses: skare3/build@main
         with:
-          CONDA_PASSWORD: CONDA_PASSWORD
-          CHANDRA_XRAY_TOKEN: CHANDRA_XRAY_TOKEN
-          token: GITHUB_TOKEN
+          platform: ubuntu-latest
+          CONDA_PASSWORD: ${{ secrets.CONDA_PASSWORD }}
+          CHANDRA_XRAY_TOKEN: ${{ secrets.CHANDRA_XRAY_TOKEN }}
+          token: ${{ secrets.GITHUB_TOKEN }}
 
