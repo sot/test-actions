@@ -26,7 +26,7 @@ jobs:
 
       - name: Print Arguments
         run: |
-          echo "Status: ${{ steps.arguments.outputs.status }}"
+          echo "Status: ${{ steps.arguments.outputs.status }}" >> $GITHUB_STEP_SUMMARY
           echo "Name: ${{ steps.arguments.outputs.name }}" >> $GITHUB_STEP_SUMMARY
           echo "Age: ${{ steps.arguments.outputs.age }}" >> $GITHUB_STEP_SUMMARY
           echo "Occupation: ${{ steps.arguments.outputs.occupation }}" >> $GITHUB_STEP_SUMMARY
