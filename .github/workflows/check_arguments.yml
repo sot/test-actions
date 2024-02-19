@@ -17,6 +17,6 @@ jobs:
       - name: Print Arguments
         shell: bash
         run: |
-          echo Arguments: ${{ toJson(github.event.client_payload) }}
+          echo Arguments: "${{ toJson(github.event.client_payload) }}"
 
 
