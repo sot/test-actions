@@ -8,7 +8,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    name: An example parsing arguments
+    name: Arguments
     steps:
       - id: arguments
         uses: skare3/check-arguments@main
@@ -26,6 +26,7 @@ jobs:
 
       - name: Print Arguments
         run: |
+          echo "Status: ${{ steps.arguments.outputs.status }}"
           echo "Name: ${{ steps.arguments.outputs.name }}" >> $GITHUB_STEP_SUMMARY
           echo "Age: ${{ steps.arguments.outputs.age }}" >> $GITHUB_STEP_SUMMARY
           echo "Occupation: ${{ steps.arguments.outputs.occupation }}" >> $GITHUB_STEP_SUMMARY
