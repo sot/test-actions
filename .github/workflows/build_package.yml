@@ -89,9 +89,6 @@ jobs:
     #     echo "skare3_branch: ${{ fromJson(steps.argument_parser.outputs.arguments).skare3_branch }}" >> $GITHUB_STEP_SUMMARY
     #     echo "channel: ${{ fromJson(steps.argument_parser.outputs.arguments).channel }}" >> $GITHUB_STEP_SUMMARY
     #     echo "platform: ${{ fromJson(steps.argument_parser.outputs.arguments).platform }}" >> $GITHUB_STEP_SUMMARY
-    - shell: bash -l {0}
-      run: |
-        echo "package_name=${{ fromJson(steps.argument_parser.outputs.arguments).package_name }}" >> $GITHUB_OUTPUT
 
   build:
     runs-on: ubuntu-latest
@@ -102,7 +99,7 @@ jobs:
     needs: arguments  # this job needs the arguments job because it uses the outputs
     steps:
       - name: Build ${{ needs.arguments.outputs.package_name }}
-        if: ${{ (matrix.os == 'ubuntu-latest') || !needs.arguments.outputs.noarch }}
+        if: ${{ (matrix.os == 'ubuntu-latest') || needs.arguments.outputs.noarch == 'false'}}
         uses: skare3/build@alpha
         with:
           package_name: ${{ needs.arguments.outputs.package_name }}
