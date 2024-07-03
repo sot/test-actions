@@ -37,6 +37,9 @@ jobs:
   # this job checks the arguments, sets defaults, and writes a summary
   arguments:
     runs-on: ubuntu-latest
+    outputs:
+      arguments: ${{ steps.argument_parser.outputs.arguments }}
+      package_name: ${{ fromJson(steps.argument_parser.outputs.arguments).package_name }}
     steps:
     - name: Parse Arguments
       id: argument_parser
@@ -93,6 +96,7 @@ jobs:
     needs: arguments  # this job needs the arguments job because it uses the outputs
     steps:
       - run: echo "Building package ${{ needs.arguments.outputs.package_name }}"
+      - run: echo "Building package ${{ fromJson(needs.arguments.outputs.arguments).package_name }}"
   #   - name: Build
   #     uses: skare3/build@alpha
   #     with:
