@@ -64,6 +64,7 @@ jobs:
             default: ${{ github.event.client_payload.platform }}
     - shell: bash -l {0}
       run: |
+        echo "ALL ARGS: ${{ toJson(steps.argument_parser.outputs.arguments) }}"
         echo "package_name: ${{ fromJson(steps.argument_parser.outputs.arguments).package_name }}"
         echo "tag: ${{ fromJson(steps.argument_parser.outputs.arguments).outputs.tag }}"
         echo "noarch: ${{ fromJson(steps.argument_parser.outputs.arguments).outputs.noarch }}"
