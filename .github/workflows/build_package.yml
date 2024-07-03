@@ -40,6 +40,8 @@ jobs:
     outputs:
       arguments: ${{ steps.argument_parser.outputs.arguments }}
       package_name: ${{ fromJson(steps.argument_parser.outputs.arguments).package_name }}
+      tag: ${{ fromJson(steps.argument_parser.outputs.arguments).tag }}
+      noarch: ${{ fromJson(steps.argument_parser.outputs.arguments).noarch }}
     steps:
     - name: Parse Arguments
       id: argument_parser
@@ -97,20 +99,20 @@ jobs:
     steps:
       - run: echo "Building package ${{ needs.arguments.outputs.package_name }}"
       - run: echo "Building package ${{ fromJson(needs.arguments.outputs.arguments).package_name }}"
-  #   - name: Build
-  #     uses: skare3/build@alpha
-  #     with:
-  #       package_name: ${{ github.event.client_payload.package }}
-  #       tag: ${{ github.event.client_payload.tag }}
-  #       noarch: ${{ !github.event.client_payload.arch && (github.event.client_payload.arch != 'true') && (github.event.client_payload.arch != 'True')}}
-  #       #python_version: ${{ needs.arguments.outputs.python_version }}
-  #       #numpy_version: ${{ needs.arguments.outputs.numpy_version }}
-  #       #skare3_branch: ${{ needs.arguments.outputs.skare3_branch }}
-  #       # the following channel in ska3-conda is used to create the build environment
-  #       #channel: ${{ needs.arguments.outputs.channel_in }}
-  #       CONDA_PASSWORD: ${{ secrets.CONDA_PASSWORD }}
-  #       git_token: ${{ secrets.GITHUB_TOKEN }}
-  #       platform: ubuntu-latest
+      - name: Build
+        uses: skare3/build@alpha
+        with:
+          package_name: ${{ needs.arguments.outputs.package_name }}
+          tag: ${{ needs.arguments.outputs.tag }}
+          noarch: ${{ needs.arguments.outputs.noarch }}
+          #python_version: ${{ needs.arguments.outputs.python_version }}
+          #numpy_version: ${{ needs.arguments.outputs.numpy_version }}
+          #skare3_branch: ${{ needs.arguments.outputs.skare3_branch }}
+          # the following channel in ska3-conda is used to create the build environment
+          #channel: ${{ needs.arguments.outputs.channel_in }}
+          CONDA_PASSWORD: ${{ secrets.CONDA_PASSWORD }}
+          git_token: ${{ secrets.GITHUB_TOKEN }}
+          platform: ubuntu-latest
 
   # upload:
   #   if: ${{ github.event.client_payload.upload == 'true' }}
