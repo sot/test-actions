@@ -40,7 +40,7 @@ jobs:
     steps:
     - name: Parse Arguments
       id: argument_parser
-      uses: skare3/check-arguments@main
+      uses: skare3/check-arguments@alpha
       with:
         arguments: |
           - name: package_name
