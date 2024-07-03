@@ -6,7 +6,7 @@ on:
       - parse-arguments
 
 jobs:
-  build:
+  parse_arguments:
     runs-on: ubuntu-latest
     name: Arguments
     outputs:
@@ -37,11 +37,11 @@ jobs:
 
   summary:
     runs-on: ubuntu-latest
-    needs: build
+    needs: parse_arguments
     steps:
       - name: Print Arguments
         run: |
-          echo "Name: ${{ needs.build.outputs.name }}" >> $GITHUB_STEP_SUMMARY
-          echo "Age: ${{ needs.build.outputs.age }}" >> $GITHUB_STEP_SUMMARY
-          echo "Occupation: ${{ needs.build.outputs.occupation }}" >> $GITHUB_STEP_SUMMARY
-          echo "Comments: ${{ needs.build.outputs.comments }}" >> $GITHUB_STEP_SUMMARY
+          echo "Name: ${{ needs.parse_arguments.outputs.name }}" >> $GITHUB_STEP_SUMMARY
+          echo "Age: ${{ needs.parse_arguments.outputs.age }}" >> $GITHUB_STEP_SUMMARY
+          echo "Occupation: ${{ needs.parse_arguments.outputs.occupation }}" >> $GITHUB_STEP_SUMMARY
+          echo "Comments: ${{ needs.parse_arguments.outputs.comments }}" >> $GITHUB_STEP_SUMMARY
