@@ -95,11 +95,14 @@ jobs:
 
   build:
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        os: ["ubuntu-latest", "macos-13", "macos-latest", "windows-2019"]
     needs: arguments  # this job needs the arguments job because it uses the outputs
     steps:
-      - run: echo "Building package ${{ needs.arguments.outputs.package_name }}"
-      - run: echo "Building package ${{ fromJson(needs.arguments.outputs.arguments).package_name }}"
-      - name: Build
+      - name: Build ${{ needs.arguments.outputs.package_name }}
+        if: ${{ (matrix.os == 'ubuntu-latest') || !needs.arguments.outputs.noarch }}
         uses: skare3/build@alpha
         with:
           package_name: ${{ needs.arguments.outputs.package_name }}
@@ -112,7 +115,7 @@ jobs:
           #channel: ${{ needs.arguments.outputs.channel_in }}
           CONDA_PASSWORD: ${{ secrets.CONDA_PASSWORD }}
           git_token: ${{ secrets.GITHUB_TOKEN }}
-          platform: ubuntu-latest
+          platform: ${{ matrix.os }}
 
   # upload:
   #   if: ${{ github.event.client_payload.upload == 'true' }}
