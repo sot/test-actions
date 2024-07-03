@@ -66,24 +66,24 @@ jobs:
       run: |
         echo "ALL ARGS: ${{ toJson(steps.argument_parser.outputs.arguments) }}"
         echo "package_name: ${{ fromJson(steps.argument_parser.outputs.arguments).package_name }}"
-        echo "tag: ${{ fromJson(steps.argument_parser.outputs.arguments).outputs.tag }}"
-        echo "noarch: ${{ fromJson(steps.argument_parser.outputs.arguments).outputs.noarch }}"
-        echo "python_version: ${{ fromJson(steps.argument_parser.outputs.arguments).outputs.python_version }}"
-        echo "numpy_version: ${{ fromJson(steps.argument_parser.outputs.arguments).outputs.numpy_version }}"
-        echo "miniconda_version: ${{ fromJson(steps.argument_parser.outputs.arguments).outputs.miniconda_version }}"
-        echo "skare3_branch: ${{ fromJson(steps.argument_parser.outputs.arguments).outputs.skare3_branch }}"
-        echo "channel: ${{ fromJson(steps.argument_parser.outputs.arguments).outputs.channel }}"
-        echo "platform: ${{ fromJson(steps.argument_parser.outputs.arguments).outputs.platform }}"
+        echo "tag: ${{ fromJson(steps.argument_parser.outputs.arguments).tag }}"
+        echo "noarch: ${{ fromJson(steps.argument_parser.outputs.arguments).noarch }}"
+        echo "python_version: ${{ fromJson(steps.argument_parser.outputs.arguments).python_version }}"
+        echo "numpy_version: ${{ fromJson(steps.argument_parser.outputs.arguments).numpy_version }}"
+        echo "miniconda_version: ${{ fromJson(steps.argument_parser.outputs.arguments).miniconda_version }}"
+        echo "skare3_branch: ${{ fromJson(steps.argument_parser.outputs.arguments).skare3_branch }}"
+        echo "channel: ${{ fromJson(steps.argument_parser.outputs.arguments).channel }}"
+        echo "platform: ${{ fromJson(steps.argument_parser.outputs.arguments).platform }}"
         echo "## Arguments:" >> $GITHUB_STEP_SUMMARY
-        echo "package_name: ${{ fromJson(steps.argument_parser.outputs.arguments).outputs.package_name }}" >> $GITHUB_STEP_SUMMARY
-        echo "tag: ${{ fromJson(steps.argument_parser.outputs.arguments).outputs.tag }}" >> $GITHUB_STEP_SUMMARY
-        echo "noarch: ${{ fromJson(steps.argument_parser.outputs.arguments).outputs.noarch }}" >> $GITHUB_STEP_SUMMARY
-        echo "python_version: ${{ fromJson(steps.argument_parser.outputs.arguments).outputs.python_version }}" >> $GITHUB_STEP_SUMMARY
-        echo "numpy_version: ${{ fromJson(steps.argument_parser.outputs.arguments).outputs.numpy_version }}" >> $GITHUB_STEP_SUMMARY
-        echo "miniconda_version: ${{ fromJson(steps.argument_parser.outputs.arguments).outputs.miniconda_version }}" >> $GITHUB_STEP_SUMMARY
-        echo "skare3_branch: ${{ fromJson(steps.argument_parser.outputs.arguments).outputs.skare3_branch }}" >> $GITHUB_STEP_SUMMARY
-        echo "channel: ${{ fromJson(steps.argument_parser.outputs.arguments).outputs.channel }}" >> $GITHUB_STEP_SUMMARY
-        echo "platform: ${{ fromJson(steps.argument_parser.outputs.arguments).outputs.platform }}" >> $GITHUB_STEP_SUMMARY
+        echo "package_name: ${{ fromJson(steps.argument_parser.outputs.arguments).package_name }}" >> $GITHUB_STEP_SUMMARY
+        echo "tag: ${{ fromJson(steps.argument_parser.outputs.arguments).tag }}" >> $GITHUB_STEP_SUMMARY
+        echo "noarch: ${{ fromJson(steps.argument_parser.outputs.arguments).noarch }}" >> $GITHUB_STEP_SUMMARY
+        echo "python_version: ${{ fromJson(steps.argument_parser.outputs.arguments).python_version }}" >> $GITHUB_STEP_SUMMARY
+        echo "numpy_version: ${{ fromJson(steps.argument_parser.outputs.arguments).numpy_version }}" >> $GITHUB_STEP_SUMMARY
+        echo "miniconda_version: ${{ fromJson(steps.argument_parser.outputs.arguments).miniconda_version }}" >> $GITHUB_STEP_SUMMARY
+        echo "skare3_branch: ${{ fromJson(steps.argument_parser.outputs.arguments).skare3_branch }}" >> $GITHUB_STEP_SUMMARY
+        echo "channel: ${{ fromJson(steps.argument_parser.outputs.arguments).channel }}" >> $GITHUB_STEP_SUMMARY
+        echo "platform: ${{ fromJson(steps.argument_parser.outputs.arguments).platform }}" >> $GITHUB_STEP_SUMMARY
 
   # build:
   #   runs-on: ubuntu-latest
