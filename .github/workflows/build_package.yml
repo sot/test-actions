@@ -106,27 +106,29 @@ jobs:
         echo "- Input channel: ${{ steps.arguments.outputs.channel_in }}" >> $GITHUB_STEP_SUMMARY
         echo "- Output channel: ${{ steps.arguments.outputs.channel_out }}" >> $GITHUB_STEP_SUMMARY
   build:
-    # This steps does the actual building
+    runs-on: ubuntu-latest
     needs: arguments  # this job needs the arguments job because it uses the outputs
-    uses: sot/skare3/.github/workflows/package_build.yml@speedy-build
-    with:
-      repository: ${{ github.event.client_payload.package }}
-      tag: ${{ github.event.client_payload.tag }}
-      noarch: ${{ !github.event.client_payload.arch && (github.event.client_payload.arch != 'true') && (github.event.client_payload.arch != 'True')}}
-      python_version: ${{ needs.arguments.outputs.python_version }}
-      numpy_version: ${{ needs.arguments.outputs.numpy_version }}
-      skare3_branch: ${{ needs.arguments.outputs.skare3_branch }}
-      # the following channel in ska3-conda is used to create the build environment
-      channel: ${{ needs.arguments.outputs.channel_in }}
-    secrets:
-      CONDA_PASSWORD: ${{ secrets.CONDA_PASSWORD }}
-      CHANDRA_XRAY_TOKEN: ${{ secrets.CHANDRA_XRAY_TOKEN }}
-      token: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+    - name: Build
+      uses: skare3/build@main
+      with:
+        repository: ${{ github.event.client_payload.package }}
+        tag: ${{ github.event.client_payload.tag }}
+        noarch: ${{ !github.event.client_payload.arch && (github.event.client_payload.arch != 'true') && (github.event.client_payload.arch != 'True')}}
+        python_version: ${{ needs.arguments.outputs.python_version }}
+        numpy_version: ${{ needs.arguments.outputs.numpy_version }}
+        skare3_branch: ${{ needs.arguments.outputs.skare3_branch }}
+        # the following channel in ska3-conda is used to create the build environment
+        channel: ${{ needs.arguments.outputs.channel_in }}
+        CONDA_PASSWORD: ${{ secrets.CONDA_PASSWORD }}
+        CHANDRA_XRAY_TOKEN: ${{ secrets.CHANDRA_XRAY_TOKEN }}
+        token: ${{ secrets.GITHUB_TOKEN }}
+        platform: ubuntu-latest
 
-  upload:
-    if: ${{ github.event.client_payload.upload == 'true' }}
-    needs: [build, arguments]  # this job needs the arguments job because it uses the outputs
-    uses: sot/skare3/.github/workflows/package_upload.yml@speedy-build
-    with:
-      # this is the destination ska3-conda channel
-      channel: ${{ needs.arguments.outputs.channel_out }}
+  # upload:
+  #   if: ${{ github.event.client_payload.upload == 'true' }}
+  #   needs: [build, arguments]  # this job needs the arguments job because it uses the outputs
+  #   uses: sot/upload
+  #   with:
+  #     # this is the destination ska3-conda channel
+  #     channel: ${{ needs.arguments.outputs.channel_out }}
