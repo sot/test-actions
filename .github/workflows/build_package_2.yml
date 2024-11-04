@@ -31,7 +31,7 @@ name: Build Ska Package
 on:
   repository_dispatch:
     types:
-      - build-package
+      - build-package-2
 
 jobs:
   # this job checks the arguments, sets defaults, and writes a summary
