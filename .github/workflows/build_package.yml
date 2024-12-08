@@ -10,7 +10,6 @@ name: Build Ska Package
 #   - upload: whether to upload the package to the ska3-conda channel (default is false)
 #   - python_version: the python version to use for the build (default is 3.11)
 #   - numpy_version: the numpy version to use for the build (default is 1.26.2)
-#   - miniconda_version: the numpy version to use for the build (default is py39_4.12.0)
 #   - channel_in: the channel to use for the build environment (default is flight).
 #     This channel gets passed to package_build workflow, which also adds conda-forge
 #   - channel_out: the channel to upload the package to (default is test)
@@ -47,7 +46,6 @@ jobs:
       upload: ${{ steps.arguments.outputs.upload }}
       python_version: ${{ steps.arguments.outputs.python_version }}
       numpy_version: ${{ steps.arguments.outputs.numpy_version }}
-      miniconda_version: ${{ steps.arguments.outputs.miniconda_version }}
       channel_in: ${{ steps.arguments.outputs.channel_in }}
       channel_out: ${{ steps.arguments.outputs.channel_out }}
       skare3_branch: ${{ steps.arguments.outputs.skare3_branch }}
@@ -88,7 +86,6 @@ jobs:
         set_boolean_default upload "${{ github.event.client_payload.upload }}" false
         set_default python_version "${{ github.event.client_payload.python_version }}" 3.11
         set_default numpy_version "${{ github.event.client_payload.numpy_version }}" 1.26.2
-        set_default miniconda_version "${{ github.event.client_payload.miniconda_version }}" latest
         set_default channel_in "${{ github.event.client_payload.channel_in }}" "flight"
         set_default channel_out "${{ github.event.client_payload.channel_out }}" "test"
         set_default skare3_branch "${{ github.event.client_payload.skare3_branch }}" "master"
@@ -106,20 +103,18 @@ jobs:
         echo "- Skare3 branch: ${{ steps.arguments.outputs.skare3_branch }}" >> $GITHUB_STEP_SUMMARY
         echo "- Python version: ${{ steps.arguments.outputs.python_version }}" >> $GITHUB_STEP_SUMMARY
         echo "- Numpy version: ${{ steps.arguments.outputs.numpy_version }}" >> $GITHUB_STEP_SUMMARY
-        echo "- Miniconda version: ${{ steps.arguments.outputs.miniconda_version }}" >> $GITHUB_STEP_SUMMARY
         echo "- Input channel: ${{ steps.arguments.outputs.channel_in }}" >> $GITHUB_STEP_SUMMARY
         echo "- Output channel: ${{ steps.arguments.outputs.channel_out }}" >> $GITHUB_STEP_SUMMARY
   build:
     # This steps does the actual building
     needs: arguments  # this job needs the arguments job because it uses the outputs
-    uses: sot/skare3/.github/workflows/package_build.yml@master
+    uses: sot/skare3/.github/workflows/package_build.yml@2025.0-branch
     with:
       repository: ${{ github.event.client_payload.package }}
       tag: ${{ github.event.client_payload.tag }}
       noarch: ${{ !github.event.client_payload.arch && (github.event.client_payload.arch != 'true') && (github.event.client_payload.arch != 'True')}}
       python_version: ${{ needs.arguments.outputs.python_version }}
       numpy_version: ${{ needs.arguments.outputs.numpy_version }}
-      miniconda_version: ${{ needs.arguments.outputs.miniconda_version }}
       skare3_branch: ${{ needs.arguments.outputs.skare3_branch }}
       # the following channel in ska3-conda is used to create the build environment
       channel: ${{ needs.arguments.outputs.channel_in }}
