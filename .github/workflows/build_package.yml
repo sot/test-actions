@@ -111,7 +111,7 @@ jobs:
   build:
     # This steps does the actual building
     needs: arguments  # this job needs the arguments job because it uses the outputs
-    uses: sot/skare3/.github/workflows/package_build.yml@master
+    uses: sot/skare3/.github/workflows/package_build.yml@2025.0-branch
     with:
       repository: ${{ github.event.client_payload.package }}
       tag: ${{ github.event.client_payload.tag }}
