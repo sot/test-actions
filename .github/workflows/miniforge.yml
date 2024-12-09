@@ -12,6 +12,8 @@ jobs:
       uses: conda-incubator/setup-miniconda@v3
       with:
         miniforge-version: latest
+        python-version: 3.11
+        activate-environment: conda-build
     - name: Set channels
       run: |
         conda config --add channels https://ska:${{ secrets.CONDA_PASSWORD }}@cxc.cfa.harvard.edu/mta/ASPECT/ska3-conda/flight
