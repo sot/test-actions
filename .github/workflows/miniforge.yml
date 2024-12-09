@@ -18,7 +18,9 @@ jobs:
         # mamba-version: "*"
     - name: Set channels
       run: |
+        conda config --show channels
         conda config --add channels https://ska:${{ secrets.CONDA_PASSWORD }}@cxc.cfa.harvard.edu/mta/ASPECT/ska3-conda/flight
+        conda config --show channels
         conda config --remove channels https://repo.anaconda.com/pkgs/main
         conda config --remove channels https://repo.anaconda.com/pkgs/r
     - name: Env List
