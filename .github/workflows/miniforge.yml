@@ -5,24 +5,15 @@ on:
 
 jobs:
   build:
-    runs-on: ${{ matrix.os }}
-    name: Build on ${{ matrix.os }}
-    strategy:
-      fail-fast: false
-      matrix:
-        os: ["ubuntu-latest"]
-    defaults:
-      run:
-        shell: bash -l {0}
+    runs-on: ubuntu-latest
+    name: Miniforge
     steps:
-    - name: Fetch
-      uses: actions/checkout@v4
     - name: Setup Conda Environment
-      uses: conda-incubator/setup-miniconda@v3.0.4
+      uses: conda-incubator/setup-miniconda@v3
       with:
         miniforge-version: latest
-        python-version: 3.11
-        activate-environment: conda-build
         channels: https://ska:${{ secrets.CONDA_PASSWORD }}@cxc.cfa.harvard.edu/mta/ASPECT/ska3-conda/flight,conda-forge
     - name: Env List
-      run: conda list
+      run: |
+        conda config --show channels
+        conda list
