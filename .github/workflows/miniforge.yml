@@ -11,7 +11,7 @@ jobs:
     - name: Setup Conda Environment
       uses: conda-incubator/setup-miniconda@v3
       with:
-        miniforge-version: latest
+        # miniforge-version: latest
         python-version: 3.11
         activate-environment: conda-build
     - name: Set channels
