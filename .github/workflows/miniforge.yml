@@ -1,7 +1,7 @@
 on:
   repository_dispatch:
     types:
-      - miniforge
+      - miniforge-test
 
 jobs:
   build:
@@ -12,7 +12,6 @@ jobs:
       uses: conda-incubator/setup-miniconda@v3
       with:
         miniforge-version: latest
-        channels: https://ska:${{ secrets.CONDA_PASSWORD }}@cxc.cfa.harvard.edu/mta/ASPECT/ska3-conda/flight,conda-forge
     - name: Env List
       run: |
         conda config --show channels
