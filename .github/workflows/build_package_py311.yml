@@ -119,7 +119,7 @@ jobs:
       python_version: ${{ needs.arguments.outputs.python_version }}
       numpy_version: ${{ needs.arguments.outputs.numpy_version }}
       skare3_branch: ${{ needs.arguments.outputs.skare3_branch }}
-      install_ska_helpers: ${{ github.event.client_payload.install_ska_helpers }}
+      install_ska_helpers: ${{ needs.arguments.outputs.install_ska_helpers }}
       # the following channel in ska3-conda is used to create the build environment
       channel: ${{ needs.arguments.outputs.channel_in }}
     secrets:
