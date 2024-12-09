@@ -16,9 +16,11 @@ jobs:
         conda-remove-defaults: "true"
         channels: conda-forge
         # mamba-version: "*"
-    # - name: Set channels
-    #   run: |
-    #     conda config --add channels https://ska:${{ secrets.CONDA_PASSWORD }}@cxc.cfa.harvard.edu/mta/ASPECT/ska3-conda/flight
+    - name: Set channels
+      run: |
+        conda config --add channels https://ska:${{ secrets.CONDA_PASSWORD }}@cxc.cfa.harvard.edu/mta/ASPECT/ska3-conda/flight
+        conda config --remove channels https://repo.anaconda.com/pkgs/main
+        conda config --remove channels https://repo.anaconda.com/pkgs/r
     - name: Env List
       run: |
         conda config --show channels
