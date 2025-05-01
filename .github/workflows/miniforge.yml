@@ -11,13 +11,14 @@ jobs:
     - name: Setup Conda Environment
       uses: conda-incubator/setup-miniconda@v3
       with:
-        # miniforge-version: latest
-        python-version: 3.11
-        conda-remove-defaults: "true"
-        channels: conda-forge
+        miniforge-version: latest
+        python-version: 3.12
+        # conda-remove-defaults: "true"
+        # channels: conda-forge
         # mamba-version: "*"
     - name: Set channels
       run: |
+        python --version
         conda config --show-sources
         conda config --show channels
         conda config --add channels https://ska:${{ secrets.CONDA_PASSWORD }}@cxc.cfa.harvard.edu/mta/ASPECT/ska3-conda/flight
