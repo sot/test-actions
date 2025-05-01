@@ -13,6 +13,7 @@ jobs:
       with:
         miniforge-version: latest
         python-version: 3.12
+        activate-environment: conda-build
         # conda-remove-defaults: "true"
         # channels: conda-forge
         # mamba-version: "*"
