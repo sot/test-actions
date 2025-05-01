@@ -16,6 +16,7 @@ jobs:
         # conda-remove-defaults: "true"
         # channels: conda-forge
         # mamba-version: "*"
+        channels: https://ska:${{ secrets.CONDA_PASSWORD }}@cxc.cfa.harvard.edu/mta/ASPECT/ska3-conda/flight,conda-forge
     - name: Set channels
       run: |
         python --version
