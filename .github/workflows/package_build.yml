@@ -102,6 +102,7 @@ jobs:
         python-version: ${{ inputs.python_version }}
         activate-environment: conda-build
     - name: Set channels
+      if: ${{ (matrix.os == 'ubuntu-latest') || !inputs.noarch }}
       run: |
         python --version
         conda config --add channels https://ska:${{ secrets.CONDA_PASSWORD }}@cxc.cfa.harvard.edu/mta/ASPECT/ska3-conda/${{ inputs.channel }}
