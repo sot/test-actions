@@ -96,7 +96,7 @@ jobs:
         path: skare3_tools
     - name: Setup Conda Environment
       if: ${{ (matrix.os == 'ubuntu-latest') || !inputs.noarch }}
-      uses: conda-incubator/setup-miniconda@v3.0.4
+      uses: conda-incubator/setup-miniconda@v3.1.1
       with:
         miniforge-version: latest
         python-version: ${{ inputs.python_version }}
