@@ -59,6 +59,19 @@ jobs:
         ${CONDA_EXE} install testr
     - name: Env List
       run: conda list
+    - name: Fetch agasc
+      uses: actions/checkout@v4
+      with:
+        repository: sot/agasc
+        ref: "master"
+        path: agasc_pkg/agasc
+    - name: Build Package (1)
+      run: |
+        pwd
+        ls
+        conda build agasc_pkg --croot builds --old-build-string --no-anaconda-upload --python 3.12 --numpy 1.26 --perl 5.32.1 -c https://ska:${{ secrets.CONDA_PASSWORD }}@cxc.cfa.harvard.edu/mta/ASPECT/ska3-conda/flight -c conda-forge --no-test
+        echo ls -R builds
+        ls -R builds
     - name: Build Package
       run: |
         arch_arg=`if [[ "${{ matrix.os }}" == "ubuntu-latest" ]]; then echo; else echo '--arch-specific'; fi`
