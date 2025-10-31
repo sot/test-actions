@@ -60,9 +60,9 @@ jobs:
     - name: Env List
       run: conda list
     - name: Build Package
+      working-directory: skare3
       run: |
-        arch_arg=`if [[ "${{ matrix.os }}" == "ubuntu-latest" ]]; then echo; else echo '--arch-specific'; fi`
-        python skare3_tools/actions/build/files/build.py $arch_arg ${{ github.event.client_payload.repository }} --tag ${{ github.event.client_payload.tag }} --python 3.12 --numpy 1.26 --skare3-branch master -c https://ska:${{ secrets.CONDA_PASSWORD }}@cxc.cfa.harvard.edu/mta/ASPECT/ska3-conda/flight -c conda-forge
+        python ska_builder.py  ${{ github.event.client_payload.repository }} --tag ${{ github.event.client_payload.tag }} -c https://ska:${{ secrets.CONDA_PASSWORD }}@cxc.cfa.harvard.edu/mta/ASPECT/ska3-conda/flight -c conda-forge
       env:
         CONDA_PASSWORD: ${{ secrets.CONDA_PASSWORD }}
         GIT_USERNAME: chandra-xray
