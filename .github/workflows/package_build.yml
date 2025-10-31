@@ -92,7 +92,7 @@ jobs:
     - name: Setup MSVC environment
       shell: cmd
       run: |
-        call "C:\Program Files\Microsoft Visual Studio\2022\Enterprise\BuildTools\VC\Auxiliary\Build\vcvarsall.bat" x64
+        call "C:\Program Files\Microsoft Visual Studio\2022\BuildTools\VC\Auxiliary\Build\vcvarsall.bat" x64
         rem Now cl.exe should be in the PATH
     - name: Fetch Skare3
       uses: actions/checkout@v4
