@@ -19,7 +19,7 @@ jobs:
     - name: Fetch
       uses: actions/checkout@v4
     - name: Setup Conda Environment
-      uses: conda-incubator/setup-miniconda@v3.0.4
+      uses: conda-incubator/setup-miniconda@v3.2.0
       with:
         miniforge-version: latest
         python-version: "3.12"
