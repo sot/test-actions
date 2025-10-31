@@ -117,7 +117,7 @@ jobs:
           echo "adding conda-forge channel"
           conda config --add channels conda-forge
         fi
-        conda config --remove channels defaults  # defaults is added "implicitly" by conda in the previous lines
+        # conda config --remove channels defaults  # defaults is added "implicitly" by conda in the previous lines
         conda config --show-sources
         conda config --show channels
     - name: Update Conda Environment
