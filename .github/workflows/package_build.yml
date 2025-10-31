@@ -89,8 +89,6 @@ jobs:
     - name: Add msbuild to PATH
       if: ${{ matrix.os == 'windows-2022' }}
       uses: microsoft/setup-msbuild@v2
-    - run: cl.exe
-      if: ${{ matrix.os == 'windows-2022' }}
     - name: Fetch Skare3
       uses: actions/checkout@v4
       if: ${{ (matrix.os == 'ubuntu-latest') || !inputs.noarch }}
