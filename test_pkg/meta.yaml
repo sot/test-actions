@@ -1,12 +1,12 @@
 package:
-  name: agasc
+  name: test_pkg
   version:  0.0.0
 
 build:
   script: pip install .
 
 source:
-  path: agasc
+  path: test_pkg
 
 
 # the build and runtime requirements. Dependencies of these requirements
@@ -17,28 +17,16 @@ requirements:
   build:
     - python
     - setuptools
-    - setuptools_scm
-    - setuptools_scm_git_archive
   # Packages required to run the package. These are the dependencies that
   # will be installed automatically whenever the package is installed.
   run:
     - python
-    - six
-    - pytables
-    - numpy
-    - numexpr
-    - chandra_time
-    - ska_path
-    - astropy
-    - h5py
-    - testr
-    - ska_helpers
 
 test:
   imports:
-    - agasc
+    - test_pkg
 
 
 about:
-  home: https://github.com/sot/agasc
+  home: https://github.com/sot/test_pkg
 

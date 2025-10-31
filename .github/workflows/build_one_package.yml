@@ -18,12 +18,6 @@ jobs:
     steps:
     - name: Fetch
       uses: actions/checkout@v4
-    - name: Fetch Skare3
-      uses: actions/checkout@v4
-      with:
-        repository: sot/skare3
-        ref: "master"
-        path: skare3
     - name: Setup Conda Environment
       uses: conda-incubator/setup-miniconda@v3.0.4
       with:
@@ -33,37 +27,22 @@ jobs:
     - name: Set channels
       run: |
         python --version
-        echo "adding flight channel"
-        conda config --add channels https://ska:${{ secrets.CONDA_PASSWORD }}@cxc.cfa.harvard.edu/mta/ASPECT/ska3-conda/flight
-        if [[ "${{ github.event.client_payload.with_conda_forge }}" == "true" ]]
-        then
-          echo "adding conda-forge channel"
-          conda config --add channels conda-forge
-        fi
+        echo "adding conda-forge channel"
+        conda config --add channels conda-forge
         conda config --remove channels defaults  # defaults is added "implicitly" by conda in the previous lines
         conda config --show-sources
         conda config --show channels
     - name: Update Conda Environment
       run: |
         conda list ^python$ --export | grep python >> $CONDA_PREFIX/conda-meta/pinned
-        conda env update -n conda-build -f ./skare3/build-environment.yml
-    - name: Install ska_helpers
-      run: |
-        ${CONDA_EXE} install ska_helpers
-        ${CONDA_EXE} install testr
+        conda install python six pytables numpy numexpr chandra_time ska_path astropy h5py testr ska_helpers
     - name: Env List
       run: conda list
-    - name: Fetch agasc
-      uses: actions/checkout@v4
-      with:
-        repository: sot/agasc
-        ref: "master"
-        path: agasc_pkg/agasc
     - name: Build Package
       run: |
         pwd
         ls
-        conda build agasc_pkg --croot builds --old-build-string --no-anaconda-upload --python 3.12 --numpy 1.26 --perl 5.32.1 -c https://ska:${{ secrets.CONDA_PASSWORD }}@cxc.cfa.harvard.edu/mta/ASPECT/ska3-conda/flight -c conda-forge --no-test
+        conda build test_pkg --croot builds --old-build-string --no-anaconda-upload --python 3.12 --numpy 1.26 --perl 5.32.1 -c conda-forge --no-test
         echo ls -R builds
         ls -R builds
 
