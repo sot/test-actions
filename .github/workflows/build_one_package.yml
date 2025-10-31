@@ -32,10 +32,6 @@ jobs:
         conda config --remove channels defaults  # defaults is added "implicitly" by conda in the previous lines
         conda config --show-sources
         conda config --show channels
-    - name: Update Conda Environment
-      run: |
-        conda list ^python$ --export | grep python >> $CONDA_PREFIX/conda-meta/pinned
-        conda install python six pytables numpy numexpr chandra_time ska_path astropy h5py testr ska_helpers
     - name: Env List
       run: conda list
     - name: Build Package
