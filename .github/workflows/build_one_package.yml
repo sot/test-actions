@@ -24,12 +24,6 @@ jobs:
         repository: sot/skare3
         ref: "master"
         path: skare3
-    - name: Fetch Skare3-tools
-      uses: actions/checkout@v4
-      with:
-        repository: sot/skare3_tools
-        ref: master
-        path: skare3_tools
     - name: Setup Conda Environment
       uses: conda-incubator/setup-miniconda@v3.0.4
       with:
@@ -65,25 +59,12 @@ jobs:
         repository: sot/agasc
         ref: "master"
         path: agasc_pkg/agasc
-    - name: Build Package (1)
+    - name: Build Package
       run: |
         pwd
         ls
         conda build agasc_pkg --croot builds --old-build-string --no-anaconda-upload --python 3.12 --numpy 1.26 --perl 5.32.1 -c https://ska:${{ secrets.CONDA_PASSWORD }}@cxc.cfa.harvard.edu/mta/ASPECT/ska3-conda/flight -c conda-forge --no-test
         echo ls -R builds
         ls -R builds
-    - name: Build Package
-      run: |
-        arch_arg=`if [[ "${{ matrix.os }}" == "ubuntu-latest" ]]; then echo; else echo '--arch-specific'; fi`
-        python skare3_tools/actions/build/files/build.py $arch_arg ${{ github.event.client_payload.repository }} --tag ${{ github.event.client_payload.tag }} --python 3.12 --numpy 1.26 --skare3-branch master -c https://ska:${{ secrets.CONDA_PASSWORD }}@cxc.cfa.harvard.edu/mta/ASPECT/ska3-conda/flight -c conda-forge
-      env:
-        CONDA_PASSWORD: ${{ secrets.CONDA_PASSWORD }}
-        GIT_USERNAME: chandra-xray
-        GIT_ASKPASS: ${{ github.workspace }}/skare3_tools/actions/build/files/git_pass.py
-        GIT_PASSWORD: ${{ secrets.CHANDRA_XRAY_TOKEN }}
-    - name: Summary
-      run: |
-        files=`find  builds/noarch/ builds/linux-64/ builds/osx-64/ builds/osx-arm64/ builds/win-64/ -not -name \*repodata\* -not -name index.html -not -name .ensure-non-empty-dir -type f`
-        echo "## Packages Built:" >> $GITHUB_STEP_SUMMARY
-        for f in $files; do echo "- $f" >> $GITHUB_STEP_SUMMARY; done;
+
 
