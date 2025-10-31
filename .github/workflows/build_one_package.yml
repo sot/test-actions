@@ -32,6 +32,10 @@ jobs:
         conda config --remove channels defaults  # defaults is added "implicitly" by conda in the previous lines
         conda config --show-sources
         conda config --show channels
+    - name: Update Conda Environment
+      run: |
+        conda list ^python$ --export | grep python >> $CONDA_PREFIX/conda-meta/pinned
+        conda install python libarchive mamba gitpython conda-build jinja2 pyyaml packaging
     - name: Env List
       run: conda list
     - name: Build Package
