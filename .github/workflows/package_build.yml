@@ -86,6 +86,11 @@ jobs:
         echo numpy_version: \'${{ inputs.numpy_version }}\'
         echo miniconda_version: \'${{ inputs.miniconda_version }}\'
         echo skare3_branch: \'${{ inputs.skare3_branch }}\'
+    - name: Add msbuild to PATH
+      if: ${{ matrix.os == 'windows-2022' }}
+      uses: microsoft/setup-msbuild@v2
+    - run: cl.exe
+      if: ${{ matrix.os == 'windows-2022' }}
     - name: Fetch Skare3
       uses: actions/checkout@v4
       if: ${{ (matrix.os == 'ubuntu-latest') || !inputs.noarch }}
