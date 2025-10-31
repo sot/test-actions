@@ -111,13 +111,13 @@ jobs:
       if: ${{ (matrix.os == 'ubuntu-latest') || !inputs.noarch }}
       run: |
         python --version
+        echo "adding ${{ inputs.channel }} channel"
+        conda config --add channels https://ska:${{ secrets.CONDA_PASSWORD }}@cxc.cfa.harvard.edu/mta/ASPECT/ska3-conda/${{ inputs.channel }}
         if [[ "${{ inputs.with_conda_forge }}" == "true" ]]
         then
           echo "adding conda-forge channel"
           conda config --add channels conda-forge
         fi
-        echo "adding ${{ inputs.channel }} channel"
-        conda config --add channels https://ska:${{ secrets.CONDA_PASSWORD }}@cxc.cfa.harvard.edu/mta/ASPECT/ska3-conda/${{ inputs.channel }}
         # conda config --remove channels defaults  # defaults is added "implicitly" by conda in the previous lines
         conda config --show-sources
         conda config --show channels
