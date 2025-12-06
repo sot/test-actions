@@ -77,8 +77,8 @@ jobs:
             windows: false
           }
         - {
-            os: macos-13,
-            name: MacOS 13,
+            os: macos-15-intel,
+            name: MacOS 15 Intel,
             noarch_builder: false,
             arch_arg: '--arch-specific',
             windows: false
