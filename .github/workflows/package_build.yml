@@ -62,22 +62,44 @@ on:
 
 jobs:
   build:
-    runs-on: ${{ matrix.os }}
-    name: Build on ${{ matrix.os }}
+    runs-on: ${{ matrix.config.os }}
+    name: Build on ${{ matrix.config.name }}
     strategy:
       fail-fast: false
       matrix:
-        os: ["ubuntu-latest", "macos-13", "macos-latest", "windows-2022"]
-    defaults:
-      run:
-        shell: bash -l {0}
+        config:
+        - {
+            os: ubuntu-latest,
+            name: Ubuntu latest,
+            noarch: true,
+            arch_arg: ''
+          }
+        - {
+            os: macos-13,
+            name: MacOS 13,
+            noarch: false,
+            arch_arg: '--arch-specific'
+          }
+        - {
+            os: macos-latest,
+            name: MacOS latest,
+            noarch: false,
+            arch_arg: '--arch-specific'
+          }
+        - {
+            os: windows-2022,
+            name: Windows 2022,
+            noarch: false,
+            arch_arg: '--arch-specific'
+          }
     steps:
     - name: Fetch
       uses: actions/checkout@v4
     - name: Show Inputs
-      if: ${{ (matrix.os == 'ubuntu-latest') || !inputs.noarch }}
+      if: ${{ matrix.config.noarch || !inputs.noarch }}
+      shell: bash -l {0}
       run: |
-        echo OS: ${{ matrix.os }}
+        echo OS: ${{ matrix.config.os }}
         echo repository: \'${{ inputs.repository }}\'
         echo tag: \'${{ inputs.tag }}\'
         echo noarch: \'${{ inputs.noarch }}\'
@@ -87,27 +109,28 @@ jobs:
         echo skare3_branch: \'${{ inputs.skare3_branch }}\'
     - name: Fetch Skare3
       uses: actions/checkout@v4
-      if: ${{ (matrix.os == 'ubuntu-latest') || !inputs.noarch }}
+      if: ${{ matrix.config.noarch || !inputs.noarch }}
       with:
         repository: sot/skare3
         ref: ${{ inputs.skare3_branch }}
         path: skare3
     - name: Fetch Skare3-tools
       uses: actions/checkout@v4
-      if: ${{ (matrix.os == 'ubuntu-latest') || !inputs.noarch }}
+      if: ${{ matrix.config.noarch || !inputs.noarch }}
       with:
         repository: sot/skare3_tools
         ref: master
         path: skare3_tools
     - name: Setup Conda Environment
-      if: ${{ (matrix.os == 'ubuntu-latest') || !inputs.noarch }}
+      if: ${{ matrix.config.noarch || !inputs.noarch }}
       uses: conda-incubator/setup-miniconda@v3.2.0
       with:
         miniforge-version: latest
         python-version: ${{ inputs.python_version }}
         activate-environment: conda-build
     - name: Set channels
-      if: ${{ (matrix.os == 'ubuntu-latest') || !inputs.noarch }}
+      if: ${{ matrix.config.noarch || !inputs.noarch }}
+      shell: bash -l {0}
       run: |
         python --version
         echo "adding ${{ inputs.channel }} channel"
@@ -120,12 +143,14 @@ jobs:
         conda config --show-sources
         conda config --show channels
     - name: Update Conda Environment
-      if: ${{ (matrix.os == 'ubuntu-latest') || !inputs.noarch }}
+      if: ${{ matrix.config.noarch || !inputs.noarch }}
+      shell: bash -l {0}
       run: |
         conda list ^python$ --export | grep python >> $CONDA_PREFIX/conda-meta/pinned
         conda env update -n conda-build -f ./skare3/build-environment.yml
     - name: Install ska_helpers
-      if: ${{ inputs.install_ska_helpers && ((matrix.os == 'ubuntu-latest') || !inputs.noarch) }}
+      if: ${{ inputs.install_ska_helpers && (matrix.config.noarch || !inputs.noarch) }}
+      shell: bash -l {0}
       run: |
         conda search ska_helpers
         err=$?
@@ -138,44 +163,36 @@ jobs:
         then ${CONDA_EXE} install testr
         fi
     - name: Env List
-      if: ${{ (matrix.os == 'ubuntu-latest') || !inputs.noarch }}
+      if: ${{ matrix.config.noarch || !inputs.noarch }}
+      shell: bash -l {0}
       run: conda list
     - name: Set up Visual Studio shell (Windows)
-      if: ${{ (matrix.os == 'windows-2022') && !inputs.noarch }}
+      if: ${{ (matrix.config.os == 'windows-2022') && !inputs.noarch }}
       uses: egor-tensin/vs-shell@v2
       with:
         arch: x64
-    - name: Build Package (Windows)
-      if: ${{ (matrix.os == 'windows-2022') && !inputs.noarch }}
-      shell: pwsh
+    - name: Build Package
+      if: ${{ matrix.config.noarch && !inputs.noarch }}
+      # shell will be power shell on windows and bash on others
       run: |
-        python skare3_tools/actions/build/files/build.py --arch-specific ${{ inputs.repository }} --tag ${{ inputs.tag }} --python ${{ inputs.python_version }} --numpy ${{ inputs.numpy_version }} --skare3-branch ${{ inputs.skare3_branch }} -c https://ska:${{ secrets.CONDA_PASSWORD }}@cxc.cfa.harvard.edu/mta/ASPECT/ska3-conda/${{ inputs.channel }} -c conda-forge
-      env:
-        CONDA_PASSWORD: ${{ secrets.CONDA_PASSWORD }}
-        GIT_USERNAME: chandra-xray
-        GIT_ASKPASS: ${{ github.workspace }}/skare3_tools/actions/build/files/git_pass.py
-        GIT_PASSWORD: ${{ secrets.CHANDRA_XRAY_TOKEN }}
-    - name: Build Package (Others)
-      if: ${{ (matrix.os == 'ubuntu-latest') || ((matrix.os != 'windows-2022') && !inputs.noarch) }}
-      run: |
-        arch_arg=`if [[ "${{ matrix.os }}" == "ubuntu-latest" ]]; then echo; else echo '--arch-specific'; fi`
-        python skare3_tools/actions/build/files/build.py $arch_arg ${{ inputs.repository }} --tag ${{ inputs.tag }} --python ${{ inputs.python_version }} --numpy ${{ inputs.numpy_version }} --skare3-branch ${{ inputs.skare3_branch }} -c https://ska:${{ secrets.CONDA_PASSWORD }}@cxc.cfa.harvard.edu/mta/ASPECT/ska3-conda/${{ inputs.channel }} -c conda-forge
+        python skare3_tools/actions/build/files/build.py ${{ matrix.config.arch_arg }} ${{ inputs.repository }} --tag ${{ inputs.tag }} --python ${{ inputs.python_version }} --numpy ${{ inputs.numpy_version }} --skare3-branch ${{ inputs.skare3_branch }} -c https://ska:${{ secrets.CONDA_PASSWORD }}@cxc.cfa.harvard.edu/mta/ASPECT/ska3-conda/${{ inputs.channel }} -c conda-forge
       env:
         CONDA_PASSWORD: ${{ secrets.CONDA_PASSWORD }}
         GIT_USERNAME: chandra-xray
         GIT_ASKPASS: ${{ github.workspace }}/skare3_tools/actions/build/files/git_pass.py
         GIT_PASSWORD: ${{ secrets.CHANDRA_XRAY_TOKEN }}
     - name: Summary
-      if: ${{ (matrix.os == 'ubuntu-latest') || !inputs.noarch }}
+      if: ${{ matrix.config.noarch || !inputs.noarch }}
+      shell: bash -l {0}
       run: |
         files=`find  builds/noarch/ builds/linux-64/ builds/osx-64/ builds/osx-arm64/ builds/win-64/ -not -name \*repodata\* -not -name index.html -not -name .ensure-non-empty-dir -type f`
         echo "## Packages Built:" >> $GITHUB_STEP_SUMMARY
         for f in $files; do echo "- $f" >> $GITHUB_STEP_SUMMARY; done;
     - name: Save package
       uses: actions/upload-artifact@v4
-      if: ${{ (matrix.os == 'ubuntu-latest') || !inputs.noarch }}
+      if: ${{ matrix.config.noarch || !inputs.noarch }}
       with:
-        name: conda-package-${{ matrix.os }}
+        name: conda-package-${{ matrix.config.os }}
         path: |
           builds/noarch/
           builds/linux-64/
