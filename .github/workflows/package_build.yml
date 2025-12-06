@@ -141,15 +141,26 @@ jobs:
     - name: Env List
       if: ${{ (matrix.os == 'ubuntu-latest') || !inputs.noarch }}
       run: conda list
-    - name: Set up Visual Studio shell
+    - name: Set up Visual Studio shell (Windows)
+      if: ${{ (matrix.os == 'windows-2022') && !inputs.noarch }}
       uses: egor-tensin/vs-shell@v2
       with:
         arch: x64
-    - name: Build Package
-      if: ${{ (matrix.os == 'ubuntu-latest') || !inputs.noarch }}
+    - name: Build Package (Windows)
+      if: ${{ (matrix.os == 'windows-2022') && !inputs.noarch }}
       shell: pwsh
       run: |
         python skare3_tools/actions/build/files/build.py --arch-specific ${{ inputs.repository }} --tag ${{ inputs.tag }} --python ${{ inputs.python_version }} --numpy ${{ inputs.numpy_version }} --skare3-branch ${{ inputs.skare3_branch }} -c https://ska:${{ secrets.CONDA_PASSWORD }}@cxc.cfa.harvard.edu/mta/ASPECT/ska3-conda/${{ inputs.channel }} -c conda-forge
+      env:
+        CONDA_PASSWORD: ${{ secrets.CONDA_PASSWORD }}
+        GIT_USERNAME: chandra-xray
+        GIT_ASKPASS: ${{ github.workspace }}/skare3_tools/actions/build/files/git_pass.py
+        GIT_PASSWORD: ${{ secrets.CHANDRA_XRAY_TOKEN }}
+    - name: Build Package (Others)
+      if: ${{ (matrix.os == 'ubuntu-latest') || ((matrix.os != 'windows-2022') && !inputs.noarch) }}
+      run: |
+        arch_arg=`if [[ "${{ matrix.os }}" == "ubuntu-latest" ]]; then echo; else echo '--arch-specific'; fi`
+        python skare3_tools/actions/build/files/build.py $arch_arg ${{ inputs.repository }} --tag ${{ inputs.tag }} --python ${{ inputs.python_version }} --numpy ${{ inputs.numpy_version }} --skare3-branch ${{ inputs.skare3_branch }} -c https://ska:${{ secrets.CONDA_PASSWORD }}@cxc.cfa.harvard.edu/mta/ASPECT/ska3-conda/${{ inputs.channel }} -c conda-forge
       env:
         CONDA_PASSWORD: ${{ secrets.CONDA_PASSWORD }}
         GIT_USERNAME: chandra-xray
