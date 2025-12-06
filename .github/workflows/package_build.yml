@@ -187,9 +187,7 @@ jobs:
         GIT_PASSWORD: ${{ secrets.CHANDRA_XRAY_TOKEN }}
     - name: Build Package
       if: ${{ !matrix.config.windows }}
-      shell: bash -l {0}
-      run: |
-        python skare3_tools/actions/build/files/build.py ${{ matrix.config.arch_arg }} ${{ inputs.repository }} --tag ${{ inputs.tag }} --python ${{ inputs.python_version }} --numpy ${{ inputs.numpy_version }} --skare3-branch ${{ inputs.skare3_branch }} -c https://ska:${{ secrets.CONDA_PASSWORD }}@cxc.cfa.harvard.edu/mta/ASPECT/ska3-conda/${{ inputs.channel }} -c conda-forge
+      run: python skare3_tools/actions/build/files/build.py ${{ matrix.config.arch_arg }} ${{ inputs.repository }} --tag ${{ inputs.tag }} --python ${{ inputs.python_version }} --numpy ${{ inputs.numpy_version }} --skare3-branch ${{ inputs.skare3_branch }} -c https://ska:${{ secrets.CONDA_PASSWORD }}@cxc.cfa.harvard.edu/mta/ASPECT/ska3-conda/${{ inputs.channel }} -c conda-forge
       env:
         CONDA_PASSWORD: ${{ secrets.CONDA_PASSWORD }}
         GIT_USERNAME: chandra-xray
