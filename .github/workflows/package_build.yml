@@ -86,14 +86,6 @@ jobs:
         echo numpy_version: \'${{ inputs.numpy_version }}\'
         echo miniconda_version: \'${{ inputs.miniconda_version }}\'
         echo skare3_branch: \'${{ inputs.skare3_branch }}\'
-    - name: Add msbuild to PATH
-      if: ${{ matrix.os == 'windows-2022' }}
-      uses: microsoft/setup-msbuild@v2
-    - name: Setup MSVC environment
-      shell: cmd
-      run: |
-        call "C:\Program Files\Microsoft Visual Studio\2022\BuildTools\VC\Auxiliary\Build\vcvarsall.bat" x64
-        rem Now cl.exe should be in the PATH
     - name: Fetch Skare3
       uses: actions/checkout@v4
       if: ${{ (matrix.os == 'ubuntu-latest') || !inputs.noarch }}
@@ -126,7 +118,6 @@ jobs:
           echo "adding conda-forge channel"
           conda config --add channels conda-forge
         fi
-        # conda config --remove channels defaults  # defaults is added "implicitly" by conda in the previous lines
         conda config --show-sources
         conda config --show channels
     - name: Update Conda Environment
@@ -150,6 +141,10 @@ jobs:
     - name: Env List
       if: ${{ (matrix.os == 'ubuntu-latest') || !inputs.noarch }}
       run: conda list
+    - name: Set up Visual Studio shell
+      uses: egor-tensin/vs-shell@v2
+      with:
+        arch: x64
     - name: Build Package
       if: ${{ (matrix.os == 'ubuntu-latest') || !inputs.noarch }}
       run: |
