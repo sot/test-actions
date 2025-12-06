@@ -72,25 +72,29 @@ jobs:
             os: ubuntu-latest,
             name: Ubuntu latest,
             noarch: true,
-            arch_arg: ''
+            arch_arg: '',
+            windows: false
           }
         - {
             os: macos-13,
             name: MacOS 13,
             noarch: false,
-            arch_arg: '--arch-specific'
+            arch_arg: '--arch-specific',
+            windows: false
           }
         - {
             os: macos-latest,
             name: MacOS latest,
             noarch: false,
-            arch_arg: '--arch-specific'
+            arch_arg: '--arch-specific',
+            windows: false
           }
         - {
             os: windows-2022,
             name: Windows 2022,
             noarch: false,
-            arch_arg: '--arch-specific'
+            arch_arg: '--arch-specific',
+            windows: true
           }
     steps:
     - name: Fetch
