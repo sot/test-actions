@@ -4,82 +4,17 @@ on:
     inputs:
       skare3_ref:
         description: 'Full skare3 ref to build (e.g. refs/tags/v2024.10)'
-        required: true
+        required: false
         type: string
+        default: '2026.7rc1'
 
 env:
   SKARE3_REF: ${{ inputs.skare3_ref }}
 
 jobs:
-  test:
-    runs-on: "windows-2022"
-    name: Test Conda build
-    defaults:
-      run:
-        shell: bash -l {0}
-    steps:
-    - name: Fetch Skare3
-      uses: actions/checkout@v4
-      with:
-        repository: sot/skare3
-        ref: ${{ inputs.skare3_ref }}
-        path: skare3
-    - name: Setup Conda Environment
-      uses: conda-incubator/setup-miniconda@v3.2.0
-      with:
-        auto-update-conda: true
-        miniforge-version: latest
-        python-version: "3.13"
-        activate-environment: conda-build
-        channels: conda-forge
-    - name: Add flight channel
-      run: conda config --env --add channels https://ska:${{ secrets.CONDA_PASSWORD }}@cxc.cfa.harvard.edu/mta/ASPECT/ska3-conda/test
-    - name: temprarily use classic solver
-      run: conda config --set solver classic
-    - name: Update Conda Environment
-      run: conda env update -n conda-build -f ./skare3/build-environment.yml
-    - name: List Conda Packages
-      run: conda list
-    - name: Update Conda Environment
-      run: conda build --help
-
-  sanity_check:
-    runs-on: ubuntu-latest
-    outputs:
-      packages: ${{ steps.sanity_check.outputs.packages }}
-      prerelease: ${{ steps.sanity_check.outputs.prerelease }}
-      overwrite_flag: ${{ steps.sanity_check.outputs.overwrite_flag }}
-    steps:
-    - name: Checkout skare3
-      uses: actions/checkout@v4
-      with:
-          repository: sot/skare3
-          ref: ${{ inputs.skare3_ref }}
-          path: skare3
-    - name: Fetch Skare3 Tools
-      uses: actions/checkout@v4
-      with:
-        repository: sot/skare3_tools
-        ref: no-sha-check
-        path: skare3_tools
-    - id: sanity_check
-      run: |
-        sudo pip3 install --upgrade setuptools
-        sudo pip3 install -r ./skare3_tools/requirements.txt
-        sudo pip3 install ./skare3_tools
-        skare3-release-check --skare3-path ./skare3 --version "$SKARE3_REF" --skip-github-sha-check
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        GITHUB_API_TOKEN: ${{ secrets.CHANDRA_XRAY_TOKEN }}
-
   build:
-    runs-on: ${{ matrix.os }}
-    name: Build on ${{ matrix.os }}
-    needs: [sanity_check]
-    strategy:
-      fail-fast: false
-      matrix:
-        os: ["windows-2022"]
+    runs-on: "windows-2022"
+    name: Build
     defaults:
       run:
         shell: bash -l {0}
@@ -110,19 +45,15 @@ jobs:
       run: conda config --set solver classic
     - name: Update Conda Environment
       run: conda env update -n conda-build -f ./skare3/build-environment.yml
+    - name: List Conda Packages
+      run: conda list
+    - name: Update Conda Environment
+      run: conda build --help
     - name: Build Package
       run: |
-        os="${{ matrix.os }}"
-        if [[ ("${os:0:6}" == "ubuntu") ]]; then arch_flag=""; else arch_flag="--arch-specific"; fi
-        echo "Packages: ${{needs.sanity_check.outputs.packages}}"
-        echo "Arch flag: ${arch_flag}"
-        echo "Override flag: ${{needs.sanity_check.outputs.overwrite_flag}}"
-        echo "### ${os} packages: " >> $GITHUB_STEP_SUMMARY
-        for package in ${{needs.sanity_check.outputs.packages}}; do
-          if [[ ("${os:0:7}" != "windows") || ("${package:0:9}" != "ska3-perl") ]]; then
-            python skare3_tools/skare3_tools/scripts/build.py ${package} \
-            ${arch_flag} --tag ${SKARE3_REF} --skare3-branch ${SKARE3_REF} ${{needs.sanity_check.outputs.overwrite_flag}};
-          fi;
+        for package in ska3-core ska3-core-latest; do
+          python skare3_tools/skare3_tools/scripts/build.py ${package} \
+          --arch-specific --tag ${SKARE3_REF} --skare3-branch ${SKARE3_REF} --skare3-overwrite-version 2026.7:2026.7rc1;
         done;
       env:
         CONDA_PASSWORD: ${{ secrets.CONDA_PASSWORD }}
@@ -144,63 +75,3 @@ jobs:
           !builds/*/*repodata*
           !builds/*/index.html
 
-  update-channel:
-    runs-on: head
-    name: Update Conda Channel
-    needs: [build]
-    steps:
-      - name: Get packages
-        uses: actions/download-artifact@v4.1.7
-        with:
-          pattern: conda-package-*
-          path: package
-      - name: Show files
-        run: tree package
-      - name: Update channel
-        run: |
-          echo ${CONDA_CHANNEL_DIR}
-          rsync -av package/conda-package-*/* ${CONDA_CHANNEL_DIR}
-          conda index ${CONDA_CHANNEL_DIR}
-        env:
-          CONDA_CHANNEL_DIR: /proj/sot/ska/www/ASPECT/ska3-conda/test
-
-  regression-test:
-    runs-on: head
-    name: Regression Tests
-    needs: [sanity_check, update-channel]
-    strategy:
-      matrix:
-        package: [ska3-flight, ska3-matlab]
-    steps:
-      - name: Fetch ska_testr
-        uses: actions/checkout@v4
-        with:
-          repository: sot/ska_testr
-          ref: master
-          path: ska_testr
-      - name: Regression Tests
-        if: contains(needs.sanity_check.outputs.packages, matrix.package) && (matrix.package == 'ska3-flight' || !contains(needs.sanity_check.outputs.packages, 'ska3-flight'))
-        run: |
-          RELEASE_TAG=`basename "$SKARE3_REF"`
-          conda create -y -n ${{ matrix.package }}-${RELEASE_TAG} --override-channels \
-                -c https://ska:${CONDA_PASSWORD}@cxc.cfa.harvard.edu/mta/ASPECT/ska3-conda/test \
-                -c https://ska:${CONDA_PASSWORD}@cxc.cfa.harvard.edu/mta/ASPECT/ska3-conda/masters  \
-                -c https://ska:${CONDA_PASSWORD}@cxc.cfa.harvard.edu/mta/ASPECT/ska3-conda/flight \
-                ${{ matrix.package }}==${RELEASE_TAG}
-          source activate ${{ matrix.package }}-${RELEASE_TAG}
-          mamba install -y --override-channels \
-                -c https://ska:${CONDA_PASSWORD}@cxc.cfa.harvard.edu/mta/ASPECT/ska3-conda/test \
-                -c https://ska:${CONDA_PASSWORD}@cxc.cfa.harvard.edu/mta/ASPECT/ska3-conda/masters  \
-                -c https://ska:${CONDA_PASSWORD}@cxc.cfa.harvard.edu/mta/ASPECT/ska3-conda/flight \
-                ska3-perl skare3_tools
-          ln -s /proj/sot/ska3/test/data $CONDA_PREFIX/data
-          export SKA=$CONDA_PREFIX
-          run_testr --root ./ska_testr --outputs-dir /export/kadi/ska_testr/release_tests --test-spec /export/kadi/ska_testr/release_tests/test_spec_fast
-          skare3-test-results --stream releases --tag head /export/kadi/ska_testr/release_tests/logs/last
-          # add test result report to PR description
-        env:
-          CONDA_PASSWORD: ${{ secrets.CONDA_PASSWORD }}
-          SKA: /proj/sot/ska
-          SYBASE_OCS: OCS-16_0
-          SYBASE: /soft/SYBASE16.0
-          LD_LIBRARY_PATH: /soft/SYBASE16.0/OCS-16_0/lib
